@@ -20,4 +20,3 @@ export TF_VAR_controller_username=“admin”
 export TF_VAR_controller_password=“REDACTED”
 make init ENV=rv
 make plan ENV=rv
-
