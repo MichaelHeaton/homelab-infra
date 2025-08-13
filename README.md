@@ -1,2 +1,3 @@
 # homelab-infra
-Homelac IaC
+
+Initial setup.
