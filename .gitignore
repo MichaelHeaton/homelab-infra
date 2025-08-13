@@ -35,3 +35,27 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ansible
+*.retry
+*.log
+.inventory
+
+# macOS
+.DS_Store
