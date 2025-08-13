@@ -4,11 +4,6 @@ on:
     paths:
       - 'terraform/**'
       - '.github/workflows/terraform-ci.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'terraform/**'
-      - '.github/workflows/terraform-ci.yml'
 
 jobs:
   tf:
