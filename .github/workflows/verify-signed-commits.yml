@@ -1,0 +1,22 @@
+name: verify-signed-commits
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check all PR commits are verified
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const pr = context.payload.pull_request.number;
+            const res = await github.rest.pulls.listCommits({ owner, repo, pull_number: pr, per_page: 250 });
+            const bad = res.data.filter(c => !(c.commit.verification && c.commit.verification.verified));
+            if (bad.length) {
+              core.setFailed(`Found ${bad.length} unverified commit(s). All commits must be verified.`);
+            } else {
+              core.notice(`All ${res.data.length} commits are verified.`);
+            }
