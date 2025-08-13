@@ -1,9 +1,7 @@
 name: terraform-ci
 on:
   pull_request:
-    paths:
-      - 'terraform/**'
-      - '.github/workflows/terraform-ci.yml'
+    types: [opened, synchronize, reopened]
 
 jobs:
   tf:
