@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  vault:
+    image: hashicorp/vault:1.17.3
+    hostname: ${VAULT_HOSTNAME:-vault}
+    user: "${PUID:-1030}:${PGID:-100}"
+    command: ["server","-config=/config/vault.hcl"]
+    cap_add: ["IPC_LOCK"]
+    environment:
+      TZ: ${TZ:-America/Denver}
+      VAULT_ADDR: "https://${PUBLIC_FQDN:-vault.SpecterRealm.com}:8200"
+      SKIP_SETCAP: "true"
+    ports:
+      - "${PUBLISHED_PORT:-8200}:8200"
+    volumes:
+      - "${CONFIG_PATH:?set CONFIG_PATH}:/config:ro"
+      - "${DATA_PATH:?set DATA_PATH}:/vault/data"
+      - "${AUDIT_PATH:?set AUDIT_PATH}:/vault/audit"
+      - "${PKI_CERT:?set PKI_CERT}:/pki/vault.crt:ro"
+      - "${PKI_KEY:?set PKI_KEY}:/pki/vault.key:ro"
+      - "${PKI_CA:?set PKI_CA}:/pki/ca.pem:ro"
+    restart: unless-stopped
