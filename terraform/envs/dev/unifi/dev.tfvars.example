@@ -1,0 +1,6 @@
+# Fill these, copy to ${ENV}.auto.tfvars or pass with -var-file
+controller_url      = "https://unifi.example.local"   # rv could be https://192.168.1.1
+controller_username = "changeme"
+controller_password = "changeme"
+controller_insecure = true
+site                = "default"                        # or your site name

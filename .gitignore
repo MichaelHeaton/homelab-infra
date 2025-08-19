@@ -42,6 +42,8 @@ terraform.rc
 .LSOverride
 
 # Terraform
+terraform/**/.terraform/
+terraform/**/.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
 .terraform/
@@ -59,3 +61,15 @@ override.tf.json
 
 # macOS
 .DS_Store
+logs/
+.scratch/
+patch.sh
+
+# local secrets
+!terraform/envs/*/secrets/.gitkeep
+terraform/envs/*/secrets/**
+terraform/envs/*/secrets/*
+!terraform/envs/*/secrets/.gitkeep
+terraform/**/secrets/
+docker/**/.env.*
+*.snap

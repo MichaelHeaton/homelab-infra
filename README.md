@@ -1,22 +1,32 @@
 # homelab-infra
 
-Infrastructure as Code for UniFi based homelab.
+Infrastructure‑as‑Code for a UniFi‑based homelab. Organized around **environments** (core/dev/prod/rv) and **reusable modules**.
 
-## Layout
-terraform/
-modules/
-unifi/{site,network,wlan,firewall,switch_port_profile}
-envs/
-core/   # shared infra and IoT friendly nets
-dev/    # optional logical env
-prod/   # optional logical env
-rv/     # RV mini site, works offline with local state
+## Quick start
 
-## Usage
-Export secrets, or create a local .auto.tfvars in the env folder, never commit secrets.
+```bash
+# preferred: Makefile wrappers
+make -C terraform/envs/&lt;env&gt;/unifi plan  VARS=../secrets/&lt;env&gt;.auto.tfvars
+make -C terraform/envs/&lt;env&gt;/unifi apply VARS=../secrets/&lt;env&gt;.auto.tfvars
 
-export TF_VAR_controller_url=“https://unifi-gw.local:8443”
-export TF_VAR_controller_username=“admin”
-export TF_VAR_controller_password=“REDACTED”
-make init ENV=rv
-make plan ENV=rv
+# fallback: raw Terraform
+terraform -chdir=terraform/envs/&lt;env&gt;/unifi init
+terraform -chdir=terraform/envs/&lt;env&gt;/unifi plan  -var-file=../secrets/&lt;env&gt;.auto.tfvars
+terraform -chdir=terraform/envs/&lt;env&gt;/unifi apply -var-file=../secrets/&lt;env&gt;.auto.tfvars
+```
+
+## Docs
+
+- **Runbooks:** see [docs/runbooks](docs/runbooks)
+
+Regenerate the docs index: `./patch.sh docs:index`
+
+## Conventions
+
+- All commits are **SSH‑signed** and verified in CI.
+- PRs must pass Terraform formatting and validation checks.
+- Secrets live in `terraform/envs/*/secrets/` (git‑ignored). Only `.gitkeep` is tracked.
+
+## License
+
+See [LICENSE](LICENSE).
