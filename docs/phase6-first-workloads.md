@@ -1,3 +1,6 @@
+---
+icon: material/rocket-launch
+---
 # Phase 6 — First Workloads
 **Goal:** run app-ready services locally.
 

@@ -9,6 +9,7 @@ theme:
     - navigation.top
     - content.code.copy
     - toc.integrate
+    - navigation.sections
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -27,8 +28,14 @@ extra:
 markdown_extensions:
   - meta
   - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
   - toc:
       permalink: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
 
 plugins:
   - search
@@ -36,16 +43,17 @@ plugins:
 nav:
   - Home: index.md
   - Hardware: hardware.md
-  - Phase 0: phase0.md
-  - Phase 1: phase1.md
-  - Phase 2: phase2.md
-  - Phase 3: phase3.md
-  - Phase 4: phase4.md
-  - Phase 5: phase5.md
-  - Phase 6: phase6.md
+  - Workstation Setup: workstation-setup.md
+  - Cloud Control Plane Setup: cloud-control-plane-setup.md
+  - Foundations: phase1-foundations.md
+  - Networking & Access: phase2-networking.md
+  - Storage & Backups: phase3-storage-backups.md
+  - Observability: phase4-observability.md
+  - Security: phase5-security.md
+  - First Workloads: phase6-first-workloads.md
   - Migration: migration.md
   - Control Plane: control-plane.md
   - Release: release.md
   - Runbooks:
-    - Resolve Conflicts: runbooks/resolve_conflicts.md
-    - Vault Bootstrap: runbooks/vault_bootstrap_runbook.md
+    - resolve conflicts: runbooks/resolve_conflicts.md
+    - vault Uootstrap runUook: runbooks/vault_bootstrap_runbook.md

@@ -1,3 +1,6 @@
+---
+icon: material/hammer-wrench
+---
 # Phase 1 — Hardware Baseline
 **Goal:** establish substrate before any VMs.
 

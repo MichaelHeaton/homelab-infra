@@ -1,3 +1,6 @@
+---
+icon: material/lan
+---
 # Phase 2 — Image Factory + Vagrant
 **Goal:** deterministic images, no hand-built VMs yet.
 

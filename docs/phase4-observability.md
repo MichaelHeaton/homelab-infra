@@ -1,3 +1,6 @@
+---
+icon: material/chart-line
+---
 # Phase 4 — Local Control Plane (HA)
 **Goal:** replace cloud control plane with local HA equivalents.
 
