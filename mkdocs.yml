@@ -1,8 +1,8 @@
 site_name: Homelab Wiki
 site_description: Step-by-step homelab guide using IaC, a workstation, and free cloud services
-site_url: https://<your-user>.github.io/<your-repo>/
-repo_url: https://github.com/<your-user>/<your-repo>
-repo_name: <your-user>/<your-repo>
+site_url: https://MichaelHeaton.github.io/homelab-infra/
+repo_url: https://github.com/MichaelHeaton/homelab-infra
+repo_name: MichaelHeaton/homelab-infra
 
 theme:
   name: material
@@ -14,7 +14,16 @@ theme:
     - search.highlight
     - search.suggest
   palette:
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
     - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
 
 nav:
   - Home: index.md
@@ -28,6 +37,8 @@ nav:
   - Phase 6: phase6.md
   - Migration: migration.md
   - Control Plane: control-plane.md
+  - Runbooks:
+      - vault_bootstrap: runbooks/vault_bootstrap_runbook.md
 
 plugins:
   - search
