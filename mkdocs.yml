@@ -24,6 +24,10 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
+<<<<<<< HEAD
+=======
+        
+>>>>>>> origin/main
 extra:
   social:
     - icon: fontawesome/brands/github
