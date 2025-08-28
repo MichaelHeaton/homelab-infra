@@ -24,7 +24,6 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
-        
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -58,3 +57,5 @@ markdown_extensions:
   - tables
   - pymdownx.details
   - pymdownx.superfences
+
+edit_uri: edit/main/docs/
