@@ -1,32 +1,58 @@
-# homelab-infra
+# Homelab Infra
 
-Infrastructure‑as‑Code for a UniFi‑based homelab. Organized around **environments** (core/dev/prod/rv) and **reusable modules**.
+This repository contains infrastructure as code (IaC) and documentation for building and managing a homelab environment using free cloud services and local hardware.
 
-## Quick start
+## Status & Docs
+
+[![Build and Deploy Docs](https://github.com/MichaelHeaton/homelab-infra/actions/workflows/pages.yml/badge.svg)](https://github.com/MichaelHeaton/homelab-infra/actions/workflows/pages.yml)
+
+**Live Docs:** https://michaelheaton.github.io/homelab-infra/
+
+## Overview
+
+- Infrastructure provisioning with Terraform and Ansible
+- VM and container management on Proxmox and Docker
+- Documentation generated with MkDocs and GitHub Pages
+
+## Repository Structure
+
+- `docs/` — MkDocs documentation source
+- `docs/runbooks/` — operational runbooks published to docs
+- `.github/` — GitHub Actions workflows and contributor templates
+- `requirements.txt` — Python requirements for docs build
+- `mkdocs.yml` — MkDocs site configuration
+
+## Getting Started
+
+1. Clone the repository
+2. Follow the step-by-step guides in the `docs/` directory
+3. Use the provided scripts and workflows for setup and deployment
+
+## Usage
+
+To preview documentation locally:
 
 ```bash
-# preferred: Makefile wrappers
-make -C terraform/envs/&lt;env&gt;/unifi plan  VARS=../secrets/&lt;env&gt;.auto.tfvars
-make -C terraform/envs/&lt;env&gt;/unifi apply VARS=../secrets/&lt;env&gt;.auto.tfvars
-
-# fallback: raw Terraform
-terraform -chdir=terraform/envs/&lt;env&gt;/unifi init
-terraform -chdir=terraform/envs/&lt;env&gt;/unifi plan  -var-file=../secrets/&lt;env&gt;.auto.tfvars
-terraform -chdir=terraform/envs/&lt;env&gt;/unifi apply -var-file=../secrets/&lt;env&gt;.auto.tfvars
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+make docs-serve
 ```
 
-## Docs
+To build static site:
 
-- **Runbooks:** see [docs/runbooks](docs/runbooks)
+```bash
+make docs-build
+```
 
-Regenerate the docs index: `./patch.sh docs:index`
+Deployment is handled automatically via GitHub Actions to the `gh-pages` branch.
 
-## Conventions
+## Contributing
 
-- All commits are **SSH‑signed** and verified in CI.
-- PRs must pass Terraform formatting and validation checks.
-- Secrets live in `terraform/envs/*/secrets/` (git‑ignored). Only `.gitkeep` is tracked.
+Contributions are welcome! Please submit pull requests or issues for improvements or bug fixes.
 
-## License
+## Runbook Template
 
-See [LICENSE](LICENSE).
+If you need to create a new runbook, start from the template at
+[`.github/RUNBOOK_TEMPLATE.md`](.github/RUNBOOK_TEMPLATE.md).
+Copy it into `docs/runbooks/` and add it to `mkdocs.yml` under the Runbooks section.
