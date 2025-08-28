@@ -73,3 +73,4 @@ terraform/envs/*/secrets/*
 terraform/**/secrets/
 docker/**/.env.*
 *.snap.venv/
+.venv/

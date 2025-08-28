@@ -20,9 +20,10 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install MkDocs
+      - name: Install deps
         run: |
-          pip install mkdocs-material
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Build site
         run: |
