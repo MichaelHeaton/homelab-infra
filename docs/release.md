@@ -1,3 +1,7 @@
+---
+hide: []
+---
+
 # Release Policy (Tags off `main`)
 
 ## Overview
@@ -50,7 +54,10 @@ git tag -d $TAG
 .PHONY: release release-dry-run release-gh
 
 ## Create an annotated tag from main and push it
+```bash
 # Usage: make release TAG=v0.1.0
+```
+
 release:
 	@test -n "$(TAG)" || (echo "TAG required, e.g., make release TAG=v0.1.0" && exit 1)
 	@current=$$(git rev-parse --abbrev-ref HEAD); \
@@ -67,7 +74,10 @@ release-dry-run:
 	@echo "Would tag current main as $(TAG) and push to origin"
 
 ## Optional: create a GitHub Release from the tag (requires gh)
+```bash
 # Usage: make release-gh TAG=v0.1.0
+```
+
 release-gh:
 	@test -n "$(TAG)" || (echo "TAG required, e.g., make release-gh TAG=v0.1.0" && exit 1)
 	@command -v gh >/dev/null 2>&1 || (echo "GitHub CLI 'gh' not found" && exit 1)

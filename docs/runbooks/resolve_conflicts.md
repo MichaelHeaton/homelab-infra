@@ -1,3 +1,7 @@
+---
+hide: []
+---
+
 # Resolve Git Merge Conflicts (Runbook)
 
 ## 1. Summary
