@@ -1,0 +1,43 @@
+site_name: Homelab Wiki
+site_description: Step-by-step homelab guide using IaC, a workstation, and free cloud services
+site_url: https://<your-user>.github.io/<your-repo>/
+repo_url: https://github.com/<your-user>/<your-repo>
+repo_name: <your-user>/<your-repo>
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+    - search.suggest
+  palette:
+    - scheme: default
+
+nav:
+  - Home: index.md
+  - Hardware: hardware.md
+  - Phase 0: phase0.md
+  - Phase 1: phase1.md
+  - Phase 2: phase2.md
+  - Phase 3: phase3.md
+  - Phase 4: phase4.md
+  - Phase 5: phase5.md
+  - Phase 6: phase6.md
+  - Migration: migration.md
+  - Control Plane: control-plane.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - attr_list
+  - def_list
+  - tables
+  - pymdownx.details
+  - pymdownx.superfences

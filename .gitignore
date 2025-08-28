@@ -72,4 +72,4 @@ terraform/envs/*/secrets/*
 !terraform/envs/*/secrets/.gitkeep
 terraform/**/secrets/
 docker/**/.env.*
-*.snap
+*.snap.venv/
