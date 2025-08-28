@@ -1,3 +1,6 @@
+---
+icon: material/swap-horizontal
+---
 # Migration Checkpoints
 - Terraform state → HCP to Consul
 - Vault secrets → HCP Vault to local Vault

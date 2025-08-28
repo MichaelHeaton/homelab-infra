@@ -1,3 +1,6 @@
+---
+icon: material/harddisk
+---
 # Phase 3 — First 3 VMs on Proxmox + Docker Swarm
 **Goal:** first managed VMs and container orchestration.
 

@@ -1,3 +1,6 @@
+---
+icon: material/server
+---
 # Deployment Choices for Control Plane
 - Consul + Vault run as 3-node VM clusters on Proxmox
 - Placement: spread across NodeA, NodeB, NodeC

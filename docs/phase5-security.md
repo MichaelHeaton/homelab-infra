@@ -1,3 +1,6 @@
+---
+icon: material/shield-lock
+---
 # Phase 5 — Core Local Services
 **Goal:** deploy platform services fully on-prem.
 
