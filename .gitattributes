@@ -1,0 +1,3 @@
+# Do not include local-only directories in release archives
+.venv/ export-ignore
+site/ export-ignore
