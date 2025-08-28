@@ -44,6 +44,7 @@ nav:
   - Migration: migration.md
   - Control Plane: control-plane.md
   - Runbooks:
+      - resolve_conflicts: runbooks/resolve_conflicts.md
       - vault_bootstrap: runbooks/vault_bootstrap_runbook.md
 
 plugins:
