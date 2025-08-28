@@ -24,6 +24,12 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
+        
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/MichaelHeaton
+      name: GitHub Profile
 
 nav:
   - Home: index.md
