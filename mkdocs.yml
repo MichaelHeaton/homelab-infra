@@ -43,6 +43,7 @@ nav:
   - Phase 6: phase6.md
   - Migration: migration.md
   - Control Plane: control-plane.md
+  - Release: release.md
   - Runbooks:
       - resolve_conflicts: runbooks/resolve_conflicts.md
       - vault_bootstrap: runbooks/vault_bootstrap_runbook.md
