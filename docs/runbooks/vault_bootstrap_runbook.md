@@ -1,3 +1,7 @@
+---
+hide: []
+---
+
 # Vault Bootstrap Runbook [Synology NAS, Portainer stack]
 
 **Scope:** minimal, temporary Vault with Raft storage and TLS. Single node. Non-root uid,gid.  

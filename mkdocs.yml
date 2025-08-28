@@ -1,35 +1,37 @@
-site_name: Homelab Wiki
-site_description: Step-by-step homelab guide using IaC, a workstation, and free cloud services
-site_url: https://MichaelHeaton.github.io/homelab-infra/
+site_name: Homelab Infra
+site_url: https://michaelheaton.github.io/homelab-infra/
 repo_url: https://github.com/MichaelHeaton/homelab-infra
 repo_name: MichaelHeaton/homelab-infra
 
 theme:
   name: material
   features:
-    - navigation.sections
-    - navigation.expand
     - navigation.top
     - content.code.copy
-    - search.highlight
-    - search.suggest
+    - toc.integrate
+  icon:
+    repo: fontawesome/brands/github
   palette:
     - scheme: slate
       primary: indigo
+      accent: indigo
       toggle:
-        icon: material/weather-sunny
+        icon: material/toggle-switch-off-outline
         name: Switch to light mode
-    - scheme: default
-      primary: indigo
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
 
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/MichaelHeaton
-      name: GitHub Profile
+
+markdown_extensions:
+  - meta
+  - admonition
+  - toc:
+      permalink: true
+
+plugins:
+  - search
 
 nav:
   - Home: index.md
@@ -45,20 +47,5 @@ nav:
   - Control Plane: control-plane.md
   - Release: release.md
   - Runbooks:
-      - resolve_conflicts: runbooks/resolve_conflicts.md
-      - vault_bootstrap: runbooks/vault_bootstrap_runbook.md
-
-plugins:
-  - search
-
-markdown_extensions:
-  - admonition
-  - toc:
-      permalink: true
-  - attr_list
-  - def_list
-  - tables
-  - pymdownx.details
-  - pymdownx.superfences
-
-edit_uri: edit/main/docs/
+    - Resolve Conflicts: runbooks/resolve_conflicts.md
+    - Vault Bootstrap: runbooks/vault_bootstrap_runbook.md
