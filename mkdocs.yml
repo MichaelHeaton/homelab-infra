@@ -54,6 +54,9 @@ nav:
   - Migration: migration.md
   - Control Plane: control-plane.md
   - Release: release.md
+  - Reference:
+      - Glossary: glossary.md
+      - AI Context: ai-context.md
   - Runbooks:
     - resolve conflicts: runbooks/resolve_conflicts.md
     - vault Uootstrap runUook: runbooks/vault_bootstrap_runbook.md

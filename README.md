@@ -26,26 +26,49 @@ This repository contains infrastructure as code (IaC) and documentation for buil
 
 1. Clone the repository
 2. Follow the step-by-step guides in the `docs/` directory
-3. Use the provided scripts and workflows for setup and deployment
+3. Use the commands in **Usage** to preview/build docs locally
 
 ## Usage
 
-To preview documentation locally:
+### One-time setup
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-make docs-serve
 ```
 
-To build static site:
+### Start the docs server (local preview)
+
+If a Makefile with targets is **not** available on your branch, run MkDocs directly:
 
 ```bash
-make docs-build
+source .venv/bin/activate
+mkdocs serve -a 0.0.0.0:8000
 ```
 
-Deployment is handled automatically via GitHub Actions to the `gh-pages` branch.
+If your branch **does** include Makefile shortcuts, you can use:
+
+```bash
+make docs-serve      # equivalent to: mkdocs serve -a 0.0.0.0:8000
+```
+
+### Re-start later
+
+```bash
+source .venv/bin/activate
+mkdocs serve -a 0.0.0.0:8000
+```
+
+### Build static site locally (optional)
+
+```bash
+mkdocs build
+```
+
+### Deployment
+
+Docs are deployed by GitHub Actions to the `gh-pages` branch when changes are merged to `main`.
 
 ## Contributing
 

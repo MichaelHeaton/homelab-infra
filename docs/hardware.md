@@ -1,5 +1,5 @@
 ---
-icon: material/lightbulb-on-outline
+icon: material/memory
 ---
 # Basic Hardware Requirements
 
