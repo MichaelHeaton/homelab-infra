@@ -63,7 +63,6 @@ override.tf.json
 .DS_Store
 logs/
 .scratch/
-patch.sh
 
 # local secrets
 !terraform/envs/*/secrets/.gitkeep
