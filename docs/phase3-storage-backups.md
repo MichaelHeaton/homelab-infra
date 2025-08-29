@@ -1,24 +1,24 @@
 ---
 icon: material/harddisk
 ---
-# Phase 3 — First 3 VMs on Proxmox + Docker Swarm
-**Goal:** first managed VMs and container orchestration.
+# Storage & Backups
 
-## 3.1 VM #1: Jump Box
-- 3.1.1 Built from golden image
-- 3.1.2 Managed with Ansible
-- 3.1.3 Verified monitoring + Vault access
+## Overview
+Synology-focused. Shares, snapshots, exports. Optional Docker workloads.
 
-## 3.2 VM #2: Proxmox Backup Server (PBS)
-- 3.2.1 PBS **VM**, datastore **on NAS**
-- 3.2.2 Validate backup/restore of templates and Jump Box
+## Outcomes
+- Shares and permissions codified
+- NFS/SMB exports ready
+- Snapshot policy baseline
 
-## 3.3 VM #3: Docker Host (Manager)
-- 3.3.1 From golden image
-- 3.3.2 Initialize **Docker Swarm**
+## Labs
+1) Detect & import existing shares and NFS exports
+2) Create required shares per role
+3) Optional: enable Docker and run seed services (ticket, Vault)
 
-## 3.4 Checkpoint
-- 3.4.1 Jump Box reachable only from mgmt VLAN
-- 3.4.2 PBS completes a full backup and a test restore
-- 3.4.3 `docker node ls` shows manager ready
+## Validation
+- Hosts mount NFS/SMB successfully
+- Snapshots visible per policy
 
+## Next
+→ Proxmox Cluster Setup
