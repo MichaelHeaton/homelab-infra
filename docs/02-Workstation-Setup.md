@@ -43,6 +43,18 @@ This chapter covers installing the core tools needed to build the lab: Git, GitH
         iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
         ```
 
+    2. Install curl (if not already available):
+
+        ```powershell
+        choco install curl
+        ```
+
+    3. Validate:
+
+        ```powershell
+        curl --version
+        ```
+
 ### Lab 1: Git and GitHub CLI
 
 !!! info "Git and GitHub CLI"
@@ -311,6 +323,7 @@ This chapter covers installing the core tools needed to build the lab: Git, GitH
 ## Validation
 
 - [ ] git --version and gh auth status show logged in
+- [ ] curl --version shows installed version (Windows only, macOS already includes curl)
 - [ ] Docker pulls and runs hello-world container
 - [ ] Terraform version command outputs installed version
 - [ ] Ansible version command outputs installed version (if installed)
@@ -318,8 +331,9 @@ This chapter covers installing the core tools needed to build the lab: Git, GitH
 ## Exit Criteria
 
 - [ ] Git and GitHub CLI are installed and authenticated
+- [ ] curl is installed and validated (Windows only, macOS already includes curl)
 - [ ] Docker Desktop is installed and running containers successfully
 - [ ] Terraform is installed and validated
 - [ ] Ansible is installed and validated (if applicable)
 
-Next → [Cloud Accounts & Foundations](cloud-control-plane-setup.md)
+Next → [Cloud Accounts & Foundations](03-Cloud-Accounts-and-Foundations.md)
