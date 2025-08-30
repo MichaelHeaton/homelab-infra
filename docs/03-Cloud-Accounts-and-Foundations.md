@@ -1,37 +1,38 @@
 ---
 icon: material/cloud
 ---
-# Cloud Control Plane Setup
+# Cloud Accounts & Foundations
 
-**Goal:** Set up the foundational tools and accounts needed for managing your homelab from the cloud.
+**Overview**
+This chapter sets up core cloud accounts and authenticates CLI tools needed for DNS, source control, and container registries.
 
-## App Configuration  
-After installing the tools on your workstation, follow these steps to configure them for use in your cloud control plane.
+## Outcomes
+- GitHub account and CLI authenticated
+- Cloudflare account and Wrangler authenticated
+- Docker Hub account and CLI authenticated
+- Optional: HashiCorp Cloud tools (Vault, Consul, Terraform)
 
-- HashiCorp Vault configuration → [docs/runbooks/vault_bootstrap_runbook.md](runbooks/vault_bootstrap_runbook.md)  
-- Terraform backend setup  
-- Consul cluster setup  
-- etc.  
+## Entry Checks
+- Workstation setup complete with required CLIs installed (gh, wrangler, docker, terraform, vault, consul)
+
 ---
 
 ## 🌐 Cloud Accounts
 
 Before continuing, ensure you have the following accounts created:
 
-- [GitHub](https://github.com) (for source control & CI/CD)  
-- [Cloudflare](https://www.cloudflare.com) (for DNS & security)  
-- [Docker Hub](https://hub.docker.com) (for container images)  
-- [HashiCorp Cloud](https://cloud.hashicorp.com) (for Vault/Consul/Terraform Cloud if desired)  
+- [GitHub](https://github.com) (for source control & CI/CD)
+- [Cloudflare](https://www.cloudflare.com) (for DNS & security)
+- [Docker Hub](https://hub.docker.com) (for container images)
+- [HashiCorp Cloud](https://cloud.hashicorp.com) (for Vault/Consul/Terraform Cloud if desired)
 
 ---
 
-## ⚡ Cloud Bootstrap
+## Labs
 
-This section covers authenticating the CLI tools you’ll need to manage your cloud control plane. Make sure the tools are already installed on your system before proceeding.
+### Lab 1: ![GitHub Logo](https://img.icons8.com/ios-glyphs/20/github.png) GitHub CLI
 
-### ![GitHub Logo](https://img.icons8.com/ios-glyphs/20/github.png) GitHub CLI
-
-The GitHub CLI (`gh`) helps you manage GitHub repositories, pull requests, and authentication from your terminal.  
+The GitHub CLI (`gh`) helps you manage GitHub repositories, pull requests, and authentication from your terminal.
 - Official docs: [GitHub CLI Documentation](https://cli.github.com/)
 
 Authenticate with GitHub using:
@@ -42,9 +43,9 @@ gh auth login
 
 ---
 
-### ![Cloudflare Logo](https://img.icons8.com/ios/20/cloud.png) Cloudflare CLI (Wrangler)
+### Lab 2: ![Cloudflare Logo](https://img.icons8.com/ios/20/cloud.png) Cloudflare CLI (Wrangler)
 
-Wrangler is Cloudflare’s CLI for managing DNS, Workers, and KV namespaces.  
+Wrangler is Cloudflare’s CLI for managing DNS, Workers, and KV namespaces.
 - Official docs: [Wrangler Documentation](https://developers.cloudflare.com/workers/wrangler/)
 
 Authenticate with Cloudflare using:
@@ -55,9 +56,9 @@ wrangler login
 
 ---
 
-### 🐳 Docker CLI
+### Lab 3: 🐳 Docker CLI
 
-The Docker CLI is used to manage containers and also serves as the interface for Docker Hub logins.  
+The Docker CLI is used to manage containers and also serves as the interface for Docker Hub logins.
 - Official docs: [Docker CLI Docs](https://docs.docker.com/engine/reference/commandline/cli/)
 
 Authenticate with Docker Hub using:
@@ -68,16 +69,16 @@ docker login
 
 ---
 
-### ![HashiCorp Logo](https://img.icons8.com/ios/20/hashicorp.png) HashiCorp CLI Tools
+### Lab 4: ![HashiCorp Logo](https://img.icons8.com/ios/20/hashicorp.png) HashiCorp CLI Tools
 
-These tools are optional but recommended if you plan to use Vault, Consul, or Terraform Cloud.  
-- [Terraform CLI](https://developer.hashicorp.com/terraform/cli)  
-- [Vault CLI](https://developer.hashicorp.com/vault/docs/commands)  
+These tools are optional but recommended if you plan to use Vault, Consul, or Terraform Cloud.
+- [Terraform CLI](https://developer.hashicorp.com/terraform/cli)
+- [Vault CLI](https://developer.hashicorp.com/vault/docs/commands)
 - [Consul CLI](https://developer.hashicorp.com/consul/docs/commands)
 
 ---
 
-## ✅ Checkpoint
+## Validation
 
 Verify that all tools are installed and authenticated correctly by running:
 
@@ -97,3 +98,12 @@ consul version
 ```
 
 Make sure each command returns the expected version or status without errors before proceeding.
+
+---
+
+## Exit Criteria
+
+- [ ] GitHub CLI authenticated
+- [ ] Cloudflare Wrangler authenticated
+- [ ] Docker CLI authenticated
+- [ ] (Optional) HashiCorp tools validated
