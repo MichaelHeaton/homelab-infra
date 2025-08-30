@@ -6,11 +6,12 @@ icon: material/laptop
 
 ## Overview
 
-This chapter covers installing the core tools needed to build the lab: Git, GitHub CLI, Docker, Terraform, and Ansible.
+This chapter covers installing the core tools needed to build the lab: Git, GitHub CLI, Wrangler (Cloudflare CLI), Docker, Terraform, and Ansible.
 
 ## Outcomes
 
 - Install and configure Git and GitHub CLI
+- Install Wrangler and validate Cloudflare login
 - Install Docker Desktop and verify installation
 - Install Terraform and validate setup
 - (Optional) Install Ansible and validate setup on supported platforms
@@ -95,7 +96,55 @@ This chapter covers installing the core tools needed to build the lab: Git, GitH
         gh auth login
         ```
 
-### Lab 2: Docker Desktop
+### Lab 2: Cloudflare Wrangler
+
+!!! info "Cloudflare Wrangler"
+    Wrangler is the CLI tool for managing Cloudflare services, including Workers and DNS.
+
+    - [Official site](https://developers.cloudflare.com/workers/wrangler/){:target="_blank"}
+    - [Docs](https://developers.cloudflare.com/workers/wrangler/commands/){:target="_blank"}
+
+=== "macOS"
+
+    1. Install Node.js (if not already installed):
+
+        ```bash
+        brew install node
+        ```
+
+    2. Install Wrangler via npm:
+
+        ```bash
+        npm install -g wrangler
+        ```
+
+    3. Authenticate Wrangler:
+
+        ```bash
+        wrangler login
+        ```
+
+=== "Windows"
+
+    1. Install Node.js (if not already installed):
+
+        ```powershell
+        choco install nodejs
+        ```
+
+    2. Install Wrangler via npm:
+
+        ```powershell
+        npm install -g wrangler
+        ```
+
+    3. Authenticate Wrangler:
+
+        ```powershell
+        wrangler login
+        ```
+
+### Lab 3: Docker Desktop
 
 !!! info "Docker Desktop"
     Docker runs applications in containers. Docker Desktop provides the local engine and UX we will use to run services during the labs.
@@ -135,7 +184,7 @@ This chapter covers installing the core tools needed to build the lab: Git, GitH
         docker run hello-world
         ```
 
-### Lab 3: Terraform Install and Validation
+### Lab 4: Terraform Install and Validation
 
 !!! info "Terraform"
     Terraform defines infrastructure as code and provisions cloud or on‑prem resources declaratively.
@@ -173,7 +222,48 @@ This chapter covers installing the core tools needed to build the lab: Git, GitH
         terraform -version
         ```
 
-### Lab 4: Ansible Install and Validation (optional for Windows)
+### Lab 5: Vault and Consul CLI
+
+!!! info "HashiCorp Vault and Consul"
+    Vault manages secrets and protects sensitive data. Consul provides service discovery and key‑value storage. Both CLIs are needed for later chapters.
+
+    - [Vault site](https://www.vaultproject.io/){:target="_blank"}
+    - [Consul site](https://www.consul.io/){:target="_blank"}
+    - [Vault CLI docs](https://developer.hashicorp.com/vault/docs/commands){:target="_blank"}
+    - [Consul CLI docs](https://developer.hashicorp.com/consul/docs/commands){:target="_blank"}
+
+=== "macOS"
+
+    1. Install Vault and Consul:
+
+        ```bash
+        brew tap hashicorp/tap
+        brew install hashicorp/tap/vault hashicorp/tap/consul
+        ```
+
+    2. Validate:
+
+        ```bash
+        vault --version
+        consul --version
+        ```
+
+=== "Windows"
+
+    1. Install Vault and Consul:
+
+        ```powershell
+        choco install vault consul
+        ```
+
+    2. Validate:
+
+        ```powershell
+        vault --version
+        consul --version
+        ```
+
+### Lab 6: Ansible Install and Validation (optional for Windows)
 
 !!! info "Ansible"
     Ansible automates configuration management and orchestration for your homelab.
@@ -207,7 +297,7 @@ This chapter covers installing the core tools needed to build the lab: Git, GitH
         ansible --version
         ```
 
-### Lab 5: Visual Studio Code
+### Lab 7: Visual Studio Code
 
 !!! info "Visual Studio Code (VS Code)"
     Visual Studio Code is a flexible editor with rich extensions useful for this lab.
@@ -324,16 +414,22 @@ This chapter covers installing the core tools needed to build the lab: Git, GitH
 
 - [ ] git --version and gh auth status show logged in
 - [ ] curl --version shows installed version (Windows only, macOS already includes curl)
+- [ ] wrangler --version prints a version and wrangler whoami shows authenticated user
 - [ ] Docker pulls and runs hello-world container
 - [ ] Terraform version command outputs installed version
 - [ ] Ansible version command outputs installed version (if installed)
+- [ ] vault version command outputs installed version
+- [ ] consul version command outputs installed version
 
 ## Exit Criteria
 
 - [ ] Git and GitHub CLI are installed and authenticated
+- [ ] Wrangler is installed and authenticated
 - [ ] curl is installed and validated (Windows only, macOS already includes curl)
 - [ ] Docker Desktop is installed and running containers successfully
 - [ ] Terraform is installed and validated
 - [ ] Ansible is installed and validated (if applicable)
+- [ ] Vault CLI is installed and validated
+- [ ] Consul CLI is installed and validated
 
 Next → [Cloud Accounts & Foundations](03-Cloud-Accounts-and-Foundations.md)
