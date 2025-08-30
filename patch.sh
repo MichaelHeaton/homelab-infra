@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -u
+# NOTE: Experimental mutators (mkdocs.yml tweaks, legacy link rewrites) are temporarily disabled
+# to prevent duplication and churn. We will re‑enable after review.
 # --- AI Context helpers -------------------------------------------------------
 ensure_file() {
   # ensure_file <path> <header_title>
@@ -55,11 +57,28 @@ This section is rewritten by `patch.sh` on each run to reflect the current layou
 
 ### Key Directories
 - `docs/` — MkDocs content source.
-  - `docs/workstation-setup.md` — Laptop/desktop tooling installs and verification.
-  - `docs/cloud-control-plane-setup.md` — HCP/HCP Terraform/Vault bootstrap.
-  - `docs/hardware.md` — Hardware guidance and author’s reference build.
+  - `docs/01-Hardware.md` — Hardware requirements and planning.
+  - `docs/02-Workstation-Setup.md` — Laptop/desktop tooling installs and verification.
+  - `docs/03-Cloud-Accounts-and-Foundations.md` — HCP Terraform and foundational services bootstrap.
+  - `docs/04-NAS-Setup.md` — Storage and backup services.
+  - `docs/05-Proxmox-Cluster-Setup.md` — Proxmox cluster deployment.
+  - `docs/06-CI-CD-for-Terraform.md` — CI/CD pipelines for Terraform workflows.
+  - `docs/07-Image-Factory.md` — Image building and automation.
+  - `docs/08-Core-Infra-VMs.md` — Core VM deployments (Jump Box, PBS, etc).
+  - `docs/09-Docker-Swarm-Cluster.md` — Docker Swarm cluster setup.
+  - `docs/10-Traefik-Authentik-Public-DNS-VPN.md` — Reverse proxy, SSO, public DNS, VPN.
+  - `docs/11-Integration-Pass-1.md` — First integration pass (import resources to TF/Vault/Consul).
+  - `docs/12-Migrations-and-Refactor.md` — State migrations and refactor.
+  - `docs/13-Observability-and-Alerting.md` — Monitoring, logging, and alerting.
+  - `docs/14-Ops-Readiness.md` — Ops readiness, DR, runbooks, SLOs.
+  - `docs/15-Local-DNS.md` — Local DNS (Pi-hole, CoreDNS, Bind).
+  - `docs/16-DMZ-and-Routing.md` — DMZ setup and routing policies.
+  - `docs/17-Public-Status-Page-and-Alerting.md` — Public status page and alerting.
+  - `docs/18-Workloads.md` — Workloads (Plex, Game Servers, Family Photos).
+  - `docs/19-Graduation.md` — Graduation and wrap-up.
   - `docs/runbooks/` — Operational runbooks for maintenance tasks.
   - `docs/glossary.md` — DAT (Define Acronyms & Terms).
+  - `docs/ai-context.md` — AI decision log and repo map.
 - `.github/workflows/pages.yml` — GitHub Pages build & deploy pipeline.
 - `mkdocs.yml` — Site configuration (theme, nav, plugins).
 - `patch.sh` — Idempotent repo maintainer (icons, nav, AI context, etc).
@@ -124,82 +143,209 @@ if [ $# -gt 0 ]; then
       shift
       upsert_repo_map
       ;;
+    --rewrite-links)
+      shift
+      rewrite_legacy_links
+      exit 0
+      ;;
   esac
 fi
 # --- end AI Context helpers ---------------------------------------------------
 echo "patch.sh: starting (args: $*) on branch $(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'n/a')"
 
-# 17) Ensure icons and rename phase files
-ensure_icon_front_matter() {
-  file="$1"
-  icon="$2"
-  if [ ! -f "$file" ]; then return; fi
-  if head -1 "$file" | grep -q '^---'; then
-    # Has front matter
-    if awk '/^---/{f=1;next} /^---/{exit} f&&/^icon:/{found=1;exit}' "$file"; then
-      # Replace existing icon key
-      awk -v ic="$icon" '
-        BEGIN{inblock=0}
-        NR==1 && /^---/ {inblock=1}
-        inblock && /^icon:/ {$0="icon: "ic}
-        /^---/ && NR!=1 {inblock=0}
-        {print}
-      ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-      echo "Icon ensured: $file -> $icon (replaced)"
-    else
-      # Insert icon key after opening ---
-      awk -v ic="$icon" '
-        NR==1 && /^---/ {print; print "icon: "ic; next}
-        {print}
-      ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-      echo "Icon ensured: $file -> $icon (inserted)"
-    fi
-  else
-    # No front matter, prepend block
-    tmpf=$(mktemp)
-    printf -- "---\nicon: %s\n---\n" "$icon" > "$tmpf"
-    cat "$file" >> "$tmpf"
-    mv "$tmpf" "$file"
-    echo "Icon ensured: $file -> $icon (prepended)"
+# --- Chapter filenames (numbered) -------------------------------------------
+# Format: "FileStem|Nav Title|Icon"
+# File path becomes docs/<NN-FileStem>.md
+chapters=(
+  "01-Hardware|Hardware|material/memory"
+  "02-Workstation-Setup|Workstation Setup|material/laptop"
+  "03-Cloud-Accounts-and-Foundations|Cloud Accounts & Foundations|material/cloud"
+  "04-NAS-Setup|NAS Setup|material/harddisk"
+  "05-Proxmox-Cluster-Setup|Proxmox Cluster Setup|material/server"
+  "06-CI-CD-for-Terraform|CI/CD for Terraform|material/git"
+  "07-Image-Factory|Image Factory|material/image"
+  "08-Core-Infra-VMs|Core Infra VMs|material/server"
+  "09-Docker-Swarm-Cluster|Docker Swarm Cluster|material/docker"
+  "10-Traefik-Authentik-Public-DNS-VPN|Traefik + Authentik + Public DNS + VPN|material/shield-lock"
+  "11-Integration-Pass-1|Integration Pass|material/link"
+  "12-Migrations-and-Refactor|Migrations & Refactor|material/swap-horizontal"
+  "13-Observability-and-Alerting|Observability + Alerting|material/chart-line"
+  "14-Ops-Readiness|Ops Readiness|material/clipboard-check"
+  "15-Local-DNS|Local DNS|material/dns"
+  "16-DMZ-and-Routing|DMZ & Routing|material/lan"
+  "17-Public-Status-Page-and-Alerting|Public Status Page + Alerting|material/alert"
+  "18-Workloads|Workloads|material/rocket-launch"
+  "19-Graduation|Graduation|material/flag-checkered"
+)
+
+# Helper: ensure a chapter file exists with a minimal scaffold
+ensure_chapter() {
+  local file="$1"      # docs/NN-Stem.md
+  local title="$2"     # Nav Title
+  local icon="$3"
+  CREATED_LAST=0
+  if [ ! -f "$file" ]; then
+    mkdir -p "$(dirname "$file")"
+    cat > "$file" <<EOF
+---
+icon: $icon
+---
+# $title
+
+## Overview
+_TBD: brief purpose of this chapter._
+
+## Outcomes
+- _TBD_
+
+## Entry Checks
+- _TBD_
+
+## Labs
+- _TBD_
+
+## Validation
+- [ ] _TBD_
+
+## Exit Criteria
+- [ ] _TBD_
+
+## Next
+_TBD_
+EOF
+    echo "Created chapter: $file"
   fi
 }
-# Main icons for specific files
-ensure_icon_front_matter docs/workstation-setup.md material/laptop
-ensure_icon_front_matter docs/cloud-control-plane-setup.md material/cloud
-ensure_icon_front_matter docs/hardware.md material/memory
-ensure_icon_front_matter docs/migration.md material/swap-horizontal
-ensure_icon_front_matter docs/control-plane.md material/server
-ensure_icon_front_matter docs/release.md material/tag
-# Runbooks icons
-for f in docs/runbooks/*.md; do
-  [ -e "$f" ] || continue
-  ensure_icon_front_matter "$f" material/book-open-page-variant
-done
-# Phase file renames (robust across /bin/sh and bash)
-for pair in \
-  "phase1.md:phase1-foundations.md" \
-  "phase2.md:phase2-networking.md" \
-  "phase3.md:phase3-storage-backups.md" \
-  "phase4.md:phase4-observability.md" \
-  "phase5.md:phase5-security.md" \
-  "phase6.md:phase6-first-workloads.md"; do
-  src="docs/${pair%%:*}"
-  dst="docs/${pair##*:}"
-  if [ -f "$src" ] && [ ! -f "$dst" ]; then
-    git mv "$src" "$dst"
-    echo "Renamed: $src -> $dst"
+
+# Ensure an icon key exists in YAML front matter; add or replace as needed
+ensure_icon_front_matter() {
+  local file="$1"
+  local icon="$2"
+  if [ ! -f "$file" ]; then
+    return 0
+  fi
+  # If file starts with front matter
+  if head -n1 "$file" | grep -q '^---$'; then
+    # Replace existing icon line or insert after opening ---
+    if grep -q '^icon:' "$file"; then
+      # BSD/GNU compatible edit
+      if ! sed -i '' -E "1,/^---$/ s|^icon:.*$|icon: $icon|" "$file" 2>/dev/null; then
+        sed -E "1,/^---$/ s|^icon:.*$|icon: $icon|" "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+      fi
+    else
+      # Insert icon line after the first --- line
+      awk 'NR==1{print; print "icon: '"$icon"'"; next}1' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    fi
+  else
+    # No front matter; prepend it
+    cat > "$file.tmp" <<EOF
+---
+icon: $icon
+---
+EOF
+    cat "$file" >> "$file.tmp"
+    mv "$file.tmp" "$file"
+  fi
+}
+
+# 17) Normalize chapter filenames and icons
+# Legacy -> numbered filename migration map (if old exists and new missing, git mv)
+# Pairs: "old_path|new_path"
+
+for map in \
+  "docs/hardware.md|docs/01-Hardware.md" \
+  "docs/workstation-setup.md|docs/02-Workstation-Setup.md" \
+  "docs/cloud-control-plane-setup.md|docs/03-Cloud-Accounts-and-Foundations.md" \
+  "docs/phase3-storage-backups.md|docs/04-NAS-Setup.md" \
+  "docs/control-plane.md|docs/05-Proxmox-Cluster-Setup.md" \
+  "docs/phase4-observability.md|docs/13-Observability-and-Alerting.md" \
+  "docs/migration.md|docs/12-Migrations-and-Refactor.md" \
+  "docs/phase6-first-workloads.md|docs/18-Workloads.md" \
+  "docs/release.md|docs/19-Graduation.md"; do
+  old="${map%%|*}"; new="${map##*|}"
+  if [ -f "$old" ] && [ ! -f "$new" ]; then
+    git mv "$old" "$new"
+    echo "Renamed: $old -> $new"
   fi
 done
-# Set icons for renamed phase files
-ensure_icon_front_matter docs/phase1-foundations.md material/hammer-wrench
-ensure_icon_front_matter docs/phase2-networking.md material/lan
-ensure_icon_front_matter docs/phase3-storage-backups.md material/harddisk
-ensure_icon_front_matter docs/phase4-observability.md material/chart-line
-ensure_icon_front_matter docs/phase5-security.md material/shield-lock
-ensure_icon_front_matter docs/phase6-first-workloads.md material/rocket-launch
+
+# Remove deprecated, unreferenced legacy chapter files if present
+for legacy in docs/phase1-foundations.md docs/phase2-networking.md docs/phase5-security.md; do
+  if [ -f "$legacy" ]; then
+    git rm -f "$legacy" 2>/dev/null || rm -f "$legacy"
+    echo "Removed legacy file: $legacy"
+  fi
+done
+
+# Ensure all chapter files exist and have front matter with icons
+for entry in "${chapters[@]}"; do
+  stem="${entry%%|*}"; rest="${entry#*|}"
+  title="${rest%%|*}"; icon="${rest##*|}"
+  file="docs/${stem}.md"
+  ensure_chapter "$file" "$title" "$icon"
+  # enforce icon in front matter
+  if [ "${CREATED_LAST:-0}" = "1" ]; then
+    ensure_icon_front_matter "$file" "$icon"
+  fi
+done
+
+: <<'DISABLED_REWRITE'
+# 17b) Rewrite old links in docs/*.md to new numbered filenames
+rewrite_legacy_links=(
+  "workstation-setup.md|02-Workstation-Setup.md"
+  "cloud-control-plane-setup.md|03-Cloud-Accounts-and-Foundations.md"
+  "hardware.md|01-Hardware.md"
+  "phase3-storage-backups.md|04-NAS-Setup.md"
+  "control-plane.md|05-Proxmox-Cluster-Setup.md"
+  "migration.md|12-Migrations-and-Refactor.md"
+  "phase4-observability.md|13-Observability-and-Alerting.md"
+  "phase6-first-workloads.md|18-Workloads.md"
+  "release.md|19-Graduation.md"
+)
+for md in docs/*.md; do
+  [ -f "$md" ] || continue
+  for m in "${link_maps[@]}"; do
+    old="${m%%|*}"; new="${m##*|}"
+    # Replace occurrences inside () link targets and bare references
+    if ! sed -i '' -e "s|(${old})|(${new})|g" -e "s|'${old}'|'${new}'|g" -e "s|\"${old}\"|\"${new}\"|g" "$md" 2>/dev/null; then
+      sed -e "s|(${old})|(${new})|g" -e "s|'${old}'|'${new}'|g" -e "s|\"${old}\"|\"${new}\"|g" "$md" > "$md.tmp" && mv "$md.tmp" "$md"
+    fi
+  done
+done
+DISABLED_REWRITE
 
 # 18) Rebuild nav deterministically and inject dynamic Runbooks
 if [ -f mkdocs.yml ]; then
+  : <<'DISABLED_FAVICONS'
+  # Ensure favicon and touch icons exist and are wired
+  # 1x1 transparent PNG (base64)
+  _PNG_1x1_B64="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
+
+  # Create assets dir
+  mkdir -p docs/assets
+
+  # Write assets if missing
+  if [ ! -f docs/assets/favicon.png ]; then
+    { printf "%s" "$_PNG_1x1_B64" | base64 -d 2>/dev/null || printf "%s" "$_PNG_1x1_B64" | base64 -D 2>/dev/null; } > docs/assets/favicon.png || true
+    echo "Seeded docs/assets/favicon.png"
+  fi
+  if [ ! -f docs/assets/apple-touch-icon.png ]; then
+    { printf "%s" "$_PNG_1x1_B64" | base64 -d 2>/dev/null || printf "%s" "$_PNG_1x1_B64" | base64 -D 2>/dev/null; } > docs/assets/apple-touch-icon.png || true
+    echo "Seeded docs/assets/apple-touch-icon.png"
+  fi
+  if [ ! -f docs/assets/favicon.ico ]; then
+    # Use the same PNG content for .ico to satisfy browser requests; many browsers accept PNG here
+    cp -f docs/assets/favicon.png docs/assets/favicon.ico 2>/dev/null || cat docs/assets/favicon.png > docs/assets/favicon.ico
+    echo "Seeded docs/assets/favicon.ico"
+  fi
+
+  # Wire site_favicon in mkdocs.yml if missing
+  if ! grep -q '^site_favicon:' mkdocs.yml; then
+    printf '\nsite_favicon: assets/favicon.png\n' >> mkdocs.yml
+    echo "Set site_favicon: assets/favicon.png"
+  fi
+DISABLED_FAVICONS
+
   # 1) Build Runbooks block from docs/runbooks/*.md
   tmp_rb=$(mktemp)
   printf "  - Runbooks:\n" > "$tmp_rb"
@@ -224,26 +370,22 @@ if [ -f mkdocs.yml ]; then
 
   # 3) Write a fresh nav block (stable order)
   tmp_nav=$(mktemp)
-  cat > "$tmp_nav" <<'YAML'
-nav:
-  - Home: index.md
-  - Hardware: hardware.md
-  - Workstation Setup: workstation-setup.md
-  - Cloud Control Plane Setup: cloud-control-plane-setup.md
-  - Foundations: phase1-foundations.md
-  - Networking & Access: phase2-networking.md
-  - Storage & Backups: phase3-storage-backups.md
-  - Observability: phase4-observability.md
-  - Security: phase5-security.md
-  - First Workloads: phase6-first-workloads.md
-  - Migration: migration.md
-  - Control Plane: control-plane.md
-  - Release: release.md
+  {
+    echo "nav:"
+    echo "  - Home: index.md"
+    # Emit numbered chapters
+    for entry in "${chapters[@]}"; do
+      stem="${entry%%|*}"; rest="${entry#*|}"; title="${rest%%|*}"
+      printf "  - %s: %s\n" "$title" "${stem}.md"
+    done
+    # Reference group
+    cat <<'YAML_EOF'
   - Reference:
       - Glossary: glossary.md
       - AI Context: ai-context.md
-YAML
-  
+YAML_EOF
+  } > "$tmp_nav"
+
   # 4) Append dynamic Runbooks block if any entries exist (more than header line)
   if [ $(wc -l < "$tmp_rb") -gt 1 ]; then
     cat "$tmp_rb" >> "$tmp_nav"
@@ -259,6 +401,7 @@ YAML
   # Update the auto-generated repo map block
   upsert_repo_map
 
+  : <<'DISABLED_SEARCH'
   # 6) Ensure search plugin present
   if ! awk '/^plugins:/{f=1} f&&/^  - search$/{found=1} END{exit(found?0:1)}' mkdocs.yml; then
     if grep -q '^plugins:' mkdocs.yml; then
@@ -272,9 +415,106 @@ YAML
     echo "Enabled plugins: search"
     :
   fi
+  # Ensure mkdocs hooks configuration includes hooks.py
+  if ! awk '/^hooks:/{f=1} f&&/^- hooks\.py$/{found=1} END{exit(found?0:1)}' mkdocs.yml; then
+    if grep -q '^hooks:' mkdocs.yml; then
+      awk '
+        /^hooks:/ {print; print "  - hooks.py"; next}
+        {print}
+      ' mkdocs.yml > mkdocs.yml.tmp && mv mkdocs.yml.tmp mkdocs.yml
+    else
+      printf '\nhooks:\n  - hooks.py\n' >> mkdocs.yml
+    fi
+    echo "Enabled hooks: hooks.py"
+  fi
+DISABLED_SEARCH
+  : <<'DISABLED_HOOKS'
+  # Ensure mkdocs hooks configuration includes hooks.py
+  if ! awk '/^hooks:/{f=1} f&&/^- hooks\.py$/{found=1} END{exit(found?0:1)}' mkdocs.yml; then
+    if grep -q '^hooks:' mkdocs.yml; then
+      awk '
+        /^hooks:/ {print; print "  - hooks.py"; next}
+        {print}
+      ' mkdocs.yml > mkdocs.yml.tmp && mv mkdocs.yml.tmp mkdocs.yml
+    else
+      printf '\nhooks:\n  - hooks.py\n' >> mkdocs.yml
+    fi
+    echo "Enabled hooks: hooks.py"
+  fi
+DISABLED_HOOKS
+
+: <<'DISABLED_MD_EXT'
+  # Ensure markdown_extensions includes abbr and pymdownx.snippets with check_paths: true and base_path: [docs]
+  # Find if markdown_extensions exists
+  if grep -q '^markdown_extensions:' mkdocs.yml; then
+    # Check if abbr is present
+    if ! grep -q '^\s*-\s*abbr' mkdocs.yml; then
+      # Insert abbr under markdown_extensions
+      sed -i '' '/^markdown_extensions:/a\
+  - abbr
+' mkdocs.yml
+    fi
+    # Check if pymdownx.snippets is present
+    if ! grep -q '^\s*-\s*pymdownx\.snippets' mkdocs.yml; then
+      # Insert pymdownx.snippets with check_paths: true and base_path: [docs] under markdown_extensions
+      # Find line number of markdown_extensions
+      md_ext_line=$(grep -n '^markdown_extensions:' mkdocs.yml | cut -d: -f1)
+      # Insert after markdown_extensions line
+      sed -i '' "$((md_ext_line))a\\
+  - pymdownx.snippets:\\
+      check_paths: true\\
+      base_path:\\
+        - docs
+" mkdocs.yml
+    else
+      # pymdownx.snippets present, check for check_paths: true
+      # If not present, add it
+      if ! grep -A1 '^\s*-\s*pymdownx\.snippets' mkdocs.yml | grep -q 'check_paths:\s*true'; then
+        # Find line number of pymdownx.snippets
+        pms_line=$(grep -n '^\s*-\s*pymdownx\.snippets' mkdocs.yml | cut -d: -f1)
+        # Insert check_paths: true after that line
+        sed -i '' "$((pms_line))a\\
+    check_paths: true
+" mkdocs.yml
+      fi
+      # Ensure base_path: docs is set
+      if ! awk 'f&&/^\s*base_path:/ {bp=1} /^\s*-\s*pymdownx\.snippets/ {f=1} f&&/^\s*-\s*[A-Za-z0-9_.-]+/ {f=0} END{exit(bp?0:1)}' mkdocs.yml; then
+        # Insert base_path under pymdownx.snippets
+        pms_line=$(grep -n '^\s*-\s*pymdownx\.snippets' mkdocs.yml | head -1 | cut -d: -f1)
+        sed -i '' "$((pms_line))a\\
+      base_path:\\
+        - docs
+" mkdocs.yml 2>/dev/null || {
+          awk -v n="$pms_line" 'NR==n{print; print "      base_path:\n        - docs"; next}1' mkdocs.yml > mkdocs.yml.tmp && mv mkdocs.yml.tmp mkdocs.yml
+        }
+      fi
+    fi
+  else
+    # markdown_extensions not present, add it at end with abbr and pymdownx.snippets
+    cat >> mkdocs.yml <<EOF
+
+markdown_extensions:
+  - abbr
+  - pymdownx.snippets:
+      check_paths: true
+      base_path:
+        - docs
+EOF
+  fi
+
+  # Ensure shared abbreviations snippet exists
+  if [ ! -f docs/includes/abbreviations.md ]; then
+    mkdir -p docs/includes
+    cat > docs/includes/abbreviations.md <<'ABBR'
+<!-- Shared abbreviations for hover tooltips across the site -->
+*[DAT]: Define Acronyms & Terms, the glossary itself
+ABBR
+    echo "Seeded docs/includes/abbreviations.md (add full definitions later)."
+  fi
 
   # Always refresh the repo map (non-destructive)
   upsert_repo_map
+DISABLED_MD_EXT
 fi
 
 echo "patch.sh: complete"

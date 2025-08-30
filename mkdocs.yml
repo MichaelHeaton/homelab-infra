@@ -5,6 +5,7 @@ repo_name: MichaelHeaton/homelab-infra
 
 theme:
   name: material
+  logo: assets/logo.svg
   features:
     - navigation.top
     - content.code.copy
@@ -27,39 +28,55 @@ extra:
       link: https://github.com/MichaelHeaton
 
 markdown_extensions:
+  - abbr
   - meta
   - admonition
   - attr_list
   - md_in_html
   - pymdownx.details
   - toc:
+      toc_depth: 2
       permalink: true
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.snippets:
+      check_paths: true
+      base_path:
+        - docs
+
+hooks:
+  - hooks.py
 
 plugins:
   - search
 
 nav:
   - Home: index.md
-  - Hardware: hardware.md
-  - Workstation Setup: workstation-setup.md
-  - Cloud Control Plane Setup: cloud-control-plane-setup.md
-  - Foundations: phase1-foundations.md
-  - Networking & Access: phase2-networking.md
-  - Storage & Backups: phase3-storage-backups.md
-  - Observability: phase4-observability.md
-  - Security: phase5-security.md
-  - First Workloads: phase6-first-workloads.md
-  - Migration: migration.md
-  - Control Plane: control-plane.md
-  - Release: release.md
+  - Hardware: 01-Hardware.md
+  - Workstation Setup: 02-Workstation-Setup.md
+  - Cloud Accounts & Foundations: 03-Cloud-Accounts-and-Foundations.md
+  - NAS Setup: 04-NAS-Setup.md
+  - Proxmox Cluster Setup: 05-Proxmox-Cluster-Setup.md
+  - CI/CD for Terraform: 06-CI-CD-for-Terraform.md
+  - Image Factory: 07-Image-Factory.md
+  - Core Infra VMs: 08-Core-Infra-VMs.md
+  - Docker Swarm Cluster: 09-Docker-Swarm-Cluster.md
+  - Traefik + Authentik + Public DNS + VPN: 10-Traefik-Authentik-Public-DNS-VPN.md
+  - Integration Pass: 11-Integration-Pass-1.md
+  - Migrations & Refactor: 12-Migrations-and-Refactor.md
+  - Observability + Alerting: 13-Observability-and-Alerting.md
+  - Ops Readiness: 14-Ops-Readiness.md
+  - Local DNS: 15-Local-DNS.md
+  - DMZ & Routing: 16-DMZ-and-Routing.md
+  - Public Status Page + Alerting: 17-Public-Status-Page-and-Alerting.md
+  - Workloads: 18-Workloads.md
+  - Graduation: 19-Graduation.md
   - Reference:
       - Glossary: glossary.md
       - AI Context: ai-context.md
   - Runbooks:
-      - Resolve Conflicts: runbooks/resolve_conflicts.md
-      - Vault Bootstrap Runbook: runbooks/vault_bootstrap_runbook.md
+    - resolve conflicts: runbooks/resolve_conflicts.md
+    - vault Uootstrap runUook: runbooks/vault_bootstrap_runbook.md

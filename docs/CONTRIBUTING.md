@@ -26,7 +26,8 @@ Welcome to the Homelab Infra documentation project! We’re excited to have you 
 - Always define acronyms and technical terms on first use.
 - Use the DAT (Define Acronyms and Terms) section or inline explanations.
 - Link to the [Glossary](glossary.md) for comprehensive definitions.
-- This helps keep content accessible to newcomers and experts alike.
+- Always add new acronyms to [Glossary](glossary.md) under **Terms**.
+- Keep the Glossary in strict alphabetical order for consistency.
 
 ### "Do You Want To Know More?" Rule
 
