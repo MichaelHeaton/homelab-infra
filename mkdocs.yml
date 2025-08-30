@@ -75,8 +75,8 @@ nav:
   - Workloads: 18-Workloads.md
   - Graduation: 19-Graduation.md
   - Reference:
-      - Glossary: glossary.md
-      - AI Context: ai-context.md
+    - AI Context: ai-context.md
+    - Glossary: glossary.md
   - Runbooks:
-    - resolve conflicts: runbooks/resolve_conflicts.md
-    - vault Uootstrap runUook: runbooks/vault_bootstrap_runbook.md
+    - Resolve Conflicts: runbooks/resolve_conflicts.md
+    - Vault Bootstrap Runbook: runbooks/vault_bootstrap_runbook.md

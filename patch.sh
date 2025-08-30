@@ -2,6 +2,7 @@
 set -u
 # NOTE: Experimental mutators (mkdocs.yml tweaks, legacy link rewrites) are temporarily disabled
 # to prevent duplication and churn. We will re‑enable after review.
+#
 # --- AI Context helpers -------------------------------------------------------
 ensure_file() {
   # ensure_file <path> <header_title>
@@ -213,6 +214,7 @@ _TBD: brief purpose of this chapter._
 ## Next
 _TBD_
 EOF
+    CREATED_LAST=1
     echo "Created chapter: $file"
   fi
 }
@@ -348,14 +350,28 @@ DISABLED_FAVICONS
 
   # 1) Build Runbooks block from docs/runbooks/*.md
   tmp_rb=$(mktemp)
-  printf "  - Runbooks:\n" > "$tmp_rb"
-  for f in docs/runbooks/*.md; do
-    [ -e "$f" ] || continue
-    base=$(basename "$f")
-    slug=${base%.md}
-    title=$(printf "%s" "$slug" | sed -E 's/[_-]+/ /g; s/\b(.)/\U\1/g')
-    printf "    - %s: runbooks/%s\n" "$title" "$base" >> "$tmp_rb"
-  done
+  {
+    printf "  - Runbooks:\n"
+    # Ensure consistent collation and sorted order
+    LC_ALL=C ls -1 docs/runbooks/*.md 2>/dev/null | LC_ALL=C sort | while read -r f; do
+      [ -e "$f" ] || continue
+      base=$(basename "$f")
+      slug=${base%.md}
+      # Normalize separators to single spaces, trim, and title-case (ASCII)
+      title=$(printf "%s" "$slug" \
+        | tr '_-' ' ' \
+        | awk '{
+            $1=$1;                             # trim leading spaces
+            for(i=1;i<=NF;i++){
+              w=$i;
+              # lowercase rest of word, uppercase first char
+              $i=toupper(substr(w,1,1)) tolower(substr(w,2));
+            }
+            print
+          }')
+      printf "    - %s: runbooks/%s\n" "$title" "$base"
+    done
+  } > "$tmp_rb"
   rb_count=$(($(wc -l < "$tmp_rb") - 1))
   echo "Nav: discovered $rb_count runbook(s)"
 
@@ -381,8 +397,8 @@ DISABLED_FAVICONS
     # Reference group
     cat <<'YAML_EOF'
   - Reference:
-      - Glossary: glossary.md
-      - AI Context: ai-context.md
+    - AI Context: ai-context.md
+    - Glossary: glossary.md
 YAML_EOF
   } > "$tmp_nav"
 
