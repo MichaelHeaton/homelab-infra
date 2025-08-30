@@ -144,6 +144,11 @@ if [ $# -gt 0 ]; then
       shift
       upsert_repo_map
       ;;
+    --rewrite-links)
+      shift
+      rewrite_legacy_links
+      exit 0
+      ;;
   esac
 fi
 # --- end AI Context helpers ---------------------------------------------------
