@@ -9,8 +9,33 @@ This page holds durable context for collaborating with AI on this repo. Entries 
 
 No pending decisions. This section is cleared on each repo update. New decisions are appended here until the next run.
 
+- The Glossary (`docs/glossary.md`) should be maintained in strict alphabetical order.
 
+### Standing Rules
 
+- **File Focus:** Respect the declared File Focus before editing. Do not touch other files unless requested.
+- **Lab Order by Dependency:** Order labs so dependencies come first. Example: Consul before Vault.
+- **Abbreviations:** Centralize in `docs/includes/abbreviations.md`. Each page should include them at the top using
+  `--8<-- "includes/abbreviations.md"`.
+- **Glossary Hygiene:** When a new tool or protocol appears, add it to `docs/glossary.md` and keep terms strictly alphabetical.
+- **Scope Control:** Only document shares or configs we plan to keep. Avoid listing temporary paths.
+- **Patch Script & Git Discipline:** Use `./patch.sh` to refresh maps/icons. Start work on a new branch. Commit only tested, working changes. Run `git status` before and after `./patch.sh`.
+
+### Style & Theme Baseline
+
+- **Theme:** MkDocs Material. Dark mode default as configured in `mkdocs.yml`.
+- **Headings:** One `#` H1 per page (title). Use `##` for sections, `###` for subsections. No deeper than `####` unless necessary.
+- **Tone:** Clear, concise, instructional. American English. Avoid slang.
+- **Punctuation:** No em-dashes or ellipses. Prefer commas or parentheses.
+- **Lists:** Use `-` for bullets. Indent nested bullets by two spaces.
+- **Code Fences:** Always specify a language (`bash`, `yaml`, `hcl`, `json`, `toml`, etc.).
+- **Tables:** Compact. Left-align text. Include a header row.
+- **Admonitions:** Prefer `!!! note`, `!!! tip`, and `!!! warning` only when they add real value.
+- **Links:** Use relative links within the repo. Descriptive link text, no bare URLs.
+- **Images/Screenshots:** Place under `docs/assets/`. Name as `section-topic-shortdesc.png`. Reference with relative paths.
+- **Abbreviation Tooltips:** Ensure the include snippet line is present near the top of each content page.
+- **Checklists:** Use `- [ ]` for tasks and exit criteria. Keep concise.
+- **Line Hygiene:** Wrap lines reasonably. No trailing whitespace.
 
 ## AI Prompt for New Chat
 

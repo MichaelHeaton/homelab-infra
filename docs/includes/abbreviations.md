@@ -38,3 +38,7 @@
 *[UPS]: Uninterruptible Power Supply, device providing backup power
 *[CLI]: Command-Line Interface, text-based way to interact with systems
 *[Git]: Distributed version control system for tracking changes in source code
+*[SMB]: Server Message Block, protocol for sharing files, printers, and serial ports over a network
+*[DSM]: DiskStation Manager, Synology's operating system for NAS devices
+*[LUN]: Logical Unit Number, a block storage allocation presented by iSCSI
+*[UI]: User Interface, the visual or interactive system for managing and using software

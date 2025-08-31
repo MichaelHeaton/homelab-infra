@@ -26,7 +26,9 @@ When adding a new acronym or term:
 - **CI/CD** — Continuous Integration / Continuous Delivery, automating testing and deployments
 - **CLI** — Command-Line Interface, text-based way to interact with systems
 - **CPU** — Central Processing Unit, the main processor of a computer
+- **Consul** — HashiCorp tool for service discovery and configuration
 - **DAT** — Define Acronyms & Terms, the glossary itself
+- **DSM** — DiskStation Manager, Synology’s operating system for NAS devices
 - **DMZ** — Demilitarized Zone, network segment that adds a layer of security between internal and external networks
 - **DNS** — Domain Name System, resolves human-readable names to IPs
 - **DR** — Disaster Recovery, processes for restoring systems after failure
@@ -38,24 +40,29 @@ When adding a new acronym or term:
 - **IaC** — Infrastructure as Code, managing infra via declarative configs
 - **IP** — Internet Protocol, addressing system for networked devices
 - **IoT** — Internet of Things, interconnected devices with network capabilities
+- **LUN** — Logical Unit Number, a block storage allocation presented by iSCSI
 - **NAS** — Network Attached Storage, dedicated storage appliance on network
 - **NFS** — Network File System, protocol for sharing files over a network
 - **NIC** — Network Interface Card, hardware for network connectivity
 - **NVMe** — Non-Volatile Memory Express, protocol for fast SSDs
 - **PBS** — Proxmox Backup Server, backup solution integrated with Proxmox
+- **Portainer** — Web UI for managing Docker containers
 - **PR** — Pull Request, a proposed change in GitHub for review/merge
-- **Prom** — Prometheus, monitoring and metrics collection system
+- **Prometheus** — Monitoring and metrics collection system
 - **RAID** — Redundant Array of Independent Disks, storage virtualization for redundancy/performance
 - **RAM** — Random Access Memory, volatile system memory
 - **SFP** — Small Form-factor Pluggable, transceiver for network modules
 - **SFP+** — Enhanced Small Form-factor Pluggable, higher-speed transceiver for networking
-- **SLOs** — Service Level Objectives, targets for reliability and performance
+- **SLOs** — Service Level Objectives, reliability/performance targets linked to SLIs and SLAs
+- **SMB** — Server Message Block, protocol for sharing files over a network
 - **SSD** — Solid State Drive, fast storage device
 - **SSO** — Single Sign-On, authentication system enabling one login for multiple services
-- **SSL** — Secure Sockets Layer, cryptographic protocol for encrypted communications
+- **SSL** — Secure Sockets Layer, cryptographic protocol for encrypted communications (deprecated, succeeded by TLS)
 - **TF** — Terraform, HashiCorp tool for IaC
+- **UI** — User Interface, the visual/interactive layer for managing systems
 - **UPS** — Uninterruptible Power Supply, device providing backup power
 - **VLAN** — Virtual LAN, network segmentation for isolating devices
 - **VM** — Virtual Machine, emulated computer instance
 - **VPN** — Virtual Private Network, secure tunnel for remote access
+- **Vault** — HashiCorp tool for secrets management
 - **iSCSI** — Internet Small Computer Systems Interface, protocol for linking data storage over IP networks
