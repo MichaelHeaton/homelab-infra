@@ -28,6 +28,7 @@ No pending decisions. This section is cleared on each repo update. New decisions
 - **Patch Script & Git Discipline:** Use `./patch.sh` to refresh maps/icons. Start work on a new branch. Commit only tested, working changes. Run `git status` before and after `./patch.sh`.
 - **Gamified Style:** Each chapter ends with a Chapter Complete XP callout; XP is for fun, not tracking.
 - **Acronym Hygiene:** Expand acronyms on first use in each file, then rely on glossary and abbreviations include for hover tooltips.
+- **PR Descriptions:** Every pull request must include a clear summary of changes, rationale, and next steps (use a standard PR description template as outlined in project discussions).
 
 ### Style & Theme Baseline
 
