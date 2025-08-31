@@ -4,13 +4,12 @@ set -euo pipefail
 # --- AI Context helpers -------------------------------------------------------
 usage() {
   cat <<'USAGE'
-Usage: ./patch.sh [--ai "text"] [--verify-map] [--nav] [--full] [--rewrite-links]
+Usage: ./patch.sh [--ai "text"] [--verify-map] [--nav] [--full]
 
   --ai "text"      Append a decision entry to docs/ai-context.md and exit.
   --verify-map     Update the auto-generated Repository Map block only, then exit.
   --nav            Rebuild mkdocs.yml navigation and repo map, then exit.
   --full           Perform the full maintenance flow (default if no flag given).
-  --rewrite-links  [disabled] Legacy link rewrite helper.
 USAGE
 }
 ensure_file() {
@@ -308,11 +307,6 @@ if [ $# -gt 0 ]; then
       ;;
     --full)
       # fall through to normal full run
-      ;;
-    --rewrite-links)
-      shift
-      rewrite_legacy_links
-      exit 0
       ;;
     *)
       echo "Unknown option: $1" >&2; usage; exit 1 ;;
