@@ -3,7 +3,13 @@ icon: material/robot-happy
 ---
 # AI Context (Decisions & Repo Map)
 
-This page holds durable context for collaborating with AI on this repo. Entries are **appended** and never auto-deleted.
+!!! info "Quick Overview"
+    **What:** Central AI context, decisions, and repo map for collaboration.
+    **Why:** Keeps sessions reproducible, consistent, and aligned.
+    **Time:** Ongoing; updated whenever structure or rules change.
+    **XP:** +20 (like Whose Line, the points are made up but the fun is real).
+
+This is the brain of the campaign—AI collaboration rules, decision logs, and the canonical repo map.
 
 ## Decision Log
 
@@ -20,6 +26,8 @@ No pending decisions. This section is cleared on each repo update. New decisions
 - **Glossary Hygiene:** When a new tool or protocol appears, add it to `docs/glossary.md` and keep terms strictly alphabetical.
 - **Scope Control:** Only document shares or configs we plan to keep. Avoid listing temporary paths.
 - **Patch Script & Git Discipline:** Use `./patch.sh` to refresh maps/icons. Start work on a new branch. Commit only tested, working changes. Run `git status` before and after `./patch.sh`.
+- **Gamified Style:** Each chapter ends with a Chapter Complete XP callout; XP is for fun, not tracking.
+- **Acronym Hygiene:** Expand acronyms on first use in each file, then rely on glossary and abbreviations include for hover tooltips.
 
 ### Style & Theme Baseline
 
@@ -36,6 +44,49 @@ No pending decisions. This section is cleared on each repo update. New decisions
 - **Abbreviation Tooltips:** Ensure the include snippet line is present near the top of each content page.
 - **Checklists:** Use `- [ ]` for tasks and exit criteria. Keep concise.
 - **Line Hygiene:** Wrap lines reasonably. No trailing whitespace.
+- **Canonical Section Order:** Entry Checks → Outcomes → Story Intro → Labs → Validation → Exit Criteria.
+- **Story Intro:** Open each chapter with 1–3 lines of narrative context that ties to the journey (why this step matters).
+- **Lab Numbering:** Use hierarchical numbering per chapter (e.g., 4.1, 4.2, 4.3). Do not renumber earlier labs when adding new ones; append 4.6, 4.7, etc.
+- **Footer Nav Only:** Do not include inline “## Next/Previous” sections in pages. Rely on MkDocs Material’s footer navigation.
+- **Icons/Emojis:** Keep subtle. Use the page front‑matter 'icon:' and occasional emojis in intros only.
+- **Admonition Titles:** Keep short, sentence case (e.g., "Note", "Tip").
+
+### Canonical Page Skeleton
+
+```markdown
+---
+icon: material/<page-icon>
+---
+# <Page Title>
+
+## Entry Checks
+- [ ] <pre-req 1>
+- [ ] <pre-req 2>
+
+## Outcomes
+- <what you will have at the end>
+
+<1–3 line Story Intro>
+
+## Labs
+### <chapter>.<lab> <Lab Title>
+- Step bullets…
+### <chapter>.<lab+1> <Lab Title>
+- Step bullets…
+
+## Validation
+- [ ] Checks…
+
+## Exit Criteria
+- [ ] Checks…
+
+> 🎉 Chapter Complete! You’ve earned up to XX XP (like Whose Line, the points are made up but the fun is real).
+```
+
+### Navigation Policy
+
+- Footer navigation is the source of truth for Previous/Next.
+- Remove any inline navigation blocks from markdown pages.
 
 ## AI Prompt for New Chat
 
@@ -84,6 +135,10 @@ Use this prompt to refresh the AI Context file:
 ```
 Review the repo. Summarize new decisions since the last run. Append them under '## Decision Log'. Then regenerate the Repository Map section with current numbered chapter filenames. Clear out older decision entries to keep the file clean.
 ```
+
+## Decision — 2025-08-31 16:54:54Z
+
+Decision: Refresh AI Context and Repo Map
 <!-- BEGIN: REPO_MAP (auto-generated; do not edit by hand) -->
 
 ## Repository Map (Auto-generated)
@@ -135,3 +190,5 @@ This section is rewritten by `patch.sh` on each run to reflect the current layou
 - Verify theme dark default + icons load on home page.
 
 <!-- END: REPO_MAP -->
+
+> 🎉 AI Context refreshed! You’ve earned +20 XP (like Whose Line, the points are made up but the fun is real).

@@ -3,6 +3,14 @@ icon: material/robot-happy
 ---
 # Glossary (DAT — Define Acronyms & Terms)
 
+!!! info "Quick Overview"
+    **What:** Central glossary of acronyms and terms used across the homelab campaign.
+    **Why:** Quick reference makes the journey smoother.
+    **Time:** Ongoing; add terms as you go.
+    **XP:** Infinite points (like Whose Line, the points are made up but the fun is real).
+
+Think of this as your hacker’s codex: a living dictionary for all the jargon, acronyms, and tools you’ll encounter in this campaign.
+
 ## Hover definitions
 
 Hover tooltips are defined centrally in `docs/includes/abbreviations.md` and injected on every page via `hooks.py`.
@@ -14,6 +22,8 @@ This page holds durable context for collaborating with AI on this repo. Entries 
 
 ## Contributing Glossary Terms
 
+Adding a term = +5 XP (don’t worry, points don’t matter—but your future self will thank you).
+
 When adding a new acronym or term:
 
 1. Add it to the **Terms** list for readers to browse.
@@ -22,7 +32,10 @@ When adding a new acronym or term:
 
 ## Terms
 
+- **ACME** — Automated Certificate Management Environment, protocol for automated certificate issuance
+- **API** — Application Programming Interface, rules and definitions for software communication
 - **CA** — Certificate Authority, entity that issues digital certificates
+- **CGNAT** — Carrier-Grade Network Address Translation, ISP technique to share IPv4 addresses
 - **CI/CD** — Continuous Integration / Continuous Delivery, automating testing and deployments
 - **CLI** — Command-Line Interface, text-based way to interact with systems
 - **CPU** — Central Processing Unit, the main processor of a computer
@@ -39,6 +52,7 @@ When adding a new acronym or term:
 - **HA** — High Availability, system design to ensure uptime and redundancy
 - **IaC** — Infrastructure as Code, managing infra via declarative configs
 - **IP** — Internet Protocol, addressing system for networked devices
+- **IPv6** — Internet Protocol version 6, next-generation internet addressing system
 - **IoT** — Internet of Things, interconnected devices with network capabilities
 - **LUN** — Logical Unit Number, a block storage allocation presented by iSCSI
 - **NAS** — Network Attached Storage, dedicated storage appliance on network
@@ -46,11 +60,13 @@ When adding a new acronym or term:
 - **NIC** — Network Interface Card, hardware for network connectivity
 - **NVMe** — Non-Volatile Memory Express, protocol for fast SSDs
 - **PBS** — Proxmox Backup Server, backup solution integrated with Proxmox
+- **PoE** — Power over Ethernet, delivers power and data over the same cable
 - **Portainer** — Web UI for managing Docker containers
 - **PR** — Pull Request, a proposed change in GitHub for review/merge
 - **Prometheus** — Monitoring and metrics collection system
 - **RAID** — Redundant Array of Independent Disks, storage virtualization for redundancy/performance
 - **RAM** — Random Access Memory, volatile system memory
+- **RJ45** — Standard connector for Ethernet networking
 - **SFP** — Small Form-factor Pluggable, transceiver for network modules
 - **SFP+** — Enhanced Small Form-factor Pluggable, higher-speed transceiver for networking
 - **SLOs** — Service Level Objectives, reliability/performance targets linked to SLIs and SLAs
@@ -66,3 +82,5 @@ When adding a new acronym or term:
 - **VPN** — Virtual Private Network, secure tunnel for remote access
 - **Vault** — HashiCorp tool for secrets management
 - **iSCSI** — Internet Small Computer Systems Interface, protocol for linking data storage over IP networks
+
+> 🎉 Glossary updated! You’ve gained wisdom XP (fun is what matters).

@@ -3,15 +3,52 @@ icon: material/harddisk
 ---
 # NAS Setup
 
---8<-- "includes/abbreviations.md"
+!!! info "Quick Overview"
+    **What:** Prepare a Synology NAS (and optional UNAS) for homelab use.
+    **Why:** NAS is the foundation for VM storage, backups, and media.
+    **Time:** 60–120 minutes.
+    **XP:** Up to 90 points.
 
+## Entry Checks
+- Synology NAS reachable on the network
+- Admin credentials available
+- Workstation can reach DSM web console
 
-## Overview
-This chapter covers preparing a Synology NAS for homelab use, including shares, permissions, exports, snapshots, and optional Docker workloads. NAS will also be the foundation for VM storage and backups.
+## Outcomes
+- Shares and permissions codified via UI or automation
+- NFS/SMB exports ready for Proxmox and other hosts
+- Snapshot policy baseline defined and validated
+- Optional: NAS Docker environment enabled for seed services
 
-> **Note:** This setup uses two NAS devices (Synology DS1621+ and UNAS). Shares are grouped by NFS or iSCSI roles for clarity.
+Storage is where your homelab lives. This chapter gets your Synology and UNAS ready for shares, snapshots, and even container workloads.
 
-## Planned NAS Layout
+## Labs
+
+### Lab 1: Detect & import existing shares and NFS exports
+
+#### Validation
+- [ ] Existing exports detected and mounted
+🏆 Achievement Unlocked: Legacy shares imported!
+
+### Lab 2: Create required shares and LUNs grouped by NFS or iSCSI roles (media, backups, workloads).
+
+#### Validation
+- [ ] New shares and LUNs created
+🏆 Achievement Unlocked: Storage provisioned!
+
+### Lab 3: Define and apply snapshot policy
+
+#### Validation
+- [ ] Snapshot policy applied
+🏆 Achievement Unlocked: Snapshots secured!
+
+### Lab 4: Setup Portainer (UI for managing containers)
+
+#### Validation
+- [ ] Portainer accessible
+🏆 Achievement Unlocked: Portainer helm on deck!
+
+### Lab 5.1: Planned NAS Layout (iSCSI, NFS, default shares)
 
 ### iSCSI Shares
 - `vm-store` (Proxmox VM storage)
@@ -33,42 +70,60 @@ This chapter covers preparing a Synology NAS for homelab use, including shares, 
 - `/video` (drop – only used by Video Station, Plex/UNAS will be used instead)
 - `/surveillance` (skip – only created if Surveillance Station is enabled)
 
-## Outcomes
-- Shares and permissions codified via UI or automation
-- NFS/SMB exports ready for Proxmox and other hosts
-- Snapshot policy baseline defined and validated
-- Optional: NAS Docker environment enabled for seed services
+#### Validation
+- [ ] Layout documented and approved
+🏆 Achievement Unlocked: NAS blueprint created!
 
-## Entry Checks
-- Synology NAS reachable on the network
-- Admin credentials available
-- Workstation can reach DSM web console
+### Lab 5.2: Detect & import existing shares and NFS exports
+
+#### Validation
+- [ ] Existing exports detected and mounted
+🏆 Achievement Unlocked: Legacy shares imported!
+
+### Lab 5.3: Create required shares and LUNs grouped by NFS or iSCSI roles (media, backups, workloads).
+
+#### Validation
+- [ ] New shares and LUNs created
+🏆 Achievement Unlocked: Storage provisioned!
+
+### Lab 5.4: Define and apply snapshot policy
+
+#### Validation
+- [ ] Snapshot policy applied
+🏆 Achievement Unlocked: Snapshots secured!
+
+### Lab 5.5: Setup Portainer (UI for managing containers)
+
+#### Validation
+- [ ] Portainer accessible
+🏆 Achievement Unlocked: Portainer helm on deck!
+
+### Lab 5.6: Deploy Consul (service discovery and configuration, backend for Vault)
+
+#### Validation
+- [ ] Consul running
+🏆 Achievement Unlocked: Consul online!
+
+### Lab 5.7: Deploy Vault (secrets management)
+
+#### Validation
+- [ ] Vault running
+🏆 Achievement Unlocked: Vault sealed and ready!
+
+### Lab 5.8: Deploy Homepage (landing page for services)
+
+#### Validation
+- [ ] Homepage reachable
+🏆 Achievement Unlocked: Dashboard launched!
+
+### Lab 5.A: Introduction to RAID, NFS, and iSCSI (explanation and why they matter in homelab setup)
+
+### Lab 5.B: Best practices for setting up a NAS/Synology (covering user management, folder structure, snapshots, and backups)
 
 ## Background Concepts
 - **RAID:** A method of combining multiple hard drives into a single unit to improve performance and/or provide redundancy to protect data in case of drive failure.
 - **NFS (Network File System):** A protocol that allows a computer to access files over a network as if they were on local storage, commonly used for sharing files in Unix/Linux environments.
 - **iSCSI (Internet Small Computer Systems Interface):** A protocol that enables block-level storage over a network, allowing systems to use remote storage devices as if they were locally attached disks.
-
-## Labs
-- **Lab 1:** Detect & import existing shares and NFS exports
-- **Lab 2:** Create required shares and LUNs grouped by NFS or iSCSI roles (media, backups, workloads).
-- **Lab 3:** Define and apply snapshot policy
-- **Lab 4:** Setup Portainer (UI for managing containers)
-- **Lab 5:** Deploy Consul (service discovery and configuration, backend for Vault)
-- **Lab 6:** Deploy Vault (secrets management)
-- **Lab 7:** Deploy Homepage (landing page for services)
-
-## Additional Labs
-- **Lab A:** Introduction to RAID, NFS, and iSCSI (explanation and why they matter in homelab setup)
-- **Lab B:** Best practices for setting up a NAS/Synology (covering user management, folder structure, snapshots, and backups)
-
-## Validation
-- Hosts mount NFS/SMB successfully
-- Snapshots are visible and match policy
-- Optional Docker containers run correctly
-- Verify UNAS exports mount correctly from Proxmox and Synology
-- Verify Docker containers managed via Portainer are running
-- Verify core containers (Portainer, Homepage, Vault, Consul) are running and accessible
 
 ## Exit Criteria
 - [ ] Shares and exports are configured and validated
@@ -77,3 +132,5 @@ This chapter covers preparing a Synology NAS for homelab use, including shares, 
 - [ ] UNAS exports validated
 - [ ] Docker workloads deployed via Portainer
 - [ ] Core Docker workloads (Portainer, Homepage, Vault, Consul) deployed and validated
+
+> 🎉 Chapter Complete! You’ve earned up to 90 XP. Storage fortress online!
