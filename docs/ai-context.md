@@ -95,22 +95,24 @@ This section is rewritten by `patch.sh` on each run to reflect the current layou
   - `docs/01-Hardware.md` — Hardware requirements and planning.
   - `docs/02-Workstation-Setup.md` — Laptop/desktop tooling installs and verification.
   - `docs/03-Cloud-Accounts-and-Foundations.md` — HCP Terraform and foundational services bootstrap.
-  - `docs/04-NAS-Setup.md` — Storage and backup services.
-  - `docs/05-Proxmox-Cluster-Setup.md` — Proxmox cluster deployment.
-  - `docs/06-CI-CD-for-Terraform.md` — CI/CD pipelines for Terraform workflows.
-  - `docs/07-Image-Factory.md` — Image building and automation.
-  - `docs/08-Core-Infra-VMs.md` — Core VM deployments (Jump Box, PBS, etc).
-  - `docs/09-Docker-Swarm-Cluster.md` — Docker Swarm cluster setup.
-  - `docs/10-Traefik-Authentik-Public-DNS-VPN.md` — Reverse proxy, SSO, public DNS, VPN.
-  - `docs/11-Integration-Pass-1.md` — First integration pass (import resources to TF/Vault/Consul).
-  - `docs/12-Migrations-and-Refactor.md` — State migrations and refactor.
-  - `docs/13-Observability-and-Alerting.md` — Monitoring, logging, and alerting.
-  - `docs/14-Ops-Readiness.md` — Ops readiness, DR, runbooks, SLOs.
-  - `docs/15-Local-DNS.md` — Local DNS (Pi-hole, CoreDNS, Bind).
-  - `docs/16-DMZ-and-Routing.md` — DMZ setup and routing policies.
-  - `docs/17-Public-Status-Page-and-Alerting.md` — Public status page and alerting.
-  - `docs/18-Workloads.md` — Workloads (Plex, Game Servers, Family Photos).
-  - `docs/19-Graduation.md` — Graduation and wrap-up.
+  - `docs/04-Network-Setup.md` — Network setup and Terraform imports.
+  - `docs/05-NAS-Setup.md` — Storage and backup services.
+  - `docs/06-Proxmox-Cluster-Setup.md` — Proxmox cluster deployment.
+  - `docs/07-CI-CD-for-Terraform.md` — CI/CD pipelines for Terraform workflows.
+  - `docs/08-Image-Factory.md` — Image building and automation.
+  - `docs/09-Core-Infra-VMs.md` — Core VM deployments (Jump Box, PBS, etc).
+  - `docs/10-Docker-Swarm-Cluster.md` — Docker Swarm cluster setup.
+  - `docs/11-Traefik-Authentik-Public-DNS-VPN.md` — Reverse proxy, SSO, public DNS, VPN.
+  - `docs/12-Integration-Pass-1.md` — First integration pass (import resources to TF/Vault/Consul).
+  - `docs/13-Migrations-and-Refactor.md` — State migrations and refactor.
+  - `docs/14-Observability-and-Alerting.md` — Monitoring, logging, and alerting.
+  - `docs/15-Ops-Readiness.md` — Ops readiness, DR, runbooks, SLOs.
+  - `docs/16-Local-DNS.md` — Local DNS (Pi-hole, CoreDNS, Bind).
+  - `docs/17-DMZ-and-Routing.md` — DMZ setup and routing policies.
+  - `docs/18-Public-Status-Page-and-Alerting.md` — Public status page and alerting.
+  - `docs/19-Workloads.md` — Workloads (Plex, Game Servers, Family Photos).
+  - `docs/20-Graduation.md` — Graduation and wrap-up.
+  - `docs/21-Lab-and-Service-Ideas.md` — Backlog of future labs and service ideas.
   - `docs/runbooks/` — Operational runbooks for maintenance tasks.
   - `docs/glossary.md` — DAT (Define Acronyms & Terms).
   - `docs/ai-context.md` — AI decision log and repo map.
