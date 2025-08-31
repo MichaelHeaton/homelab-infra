@@ -144,33 +144,125 @@ EOF
   echo "AI Context: repo map updated."
 }
 
-# CLI: split-mode helpers
-if [ $# -gt 0 ]; then
-  case "$1" in
-    --help|-h)
-      usage; exit 0 ;;
-    --ai)
-      shift; append_ai_decision "$*"; exit 0 ;;
-    --verify-map)
-      upsert_repo_map; exit 0 ;;
-    --verify)
-      echo "[DEPRECATED] Use --verify-map instead of --verify." >&2
-      upsert_repo_map
-      exit 0 ;;
-    --nav)
-      rebuild_nav; exit 0 ;;
-    --full)
-      # fall through to normal full run
-      ;;
-    --rewrite-links)
-      shift; rewrite_legacy_links; exit 0 ;;
-    *)
-      echo "Unknown option: $1" >&2; usage; exit 1 ;;
-  esac
-fi
-# --- end AI Context helpers ---------------------------------------------------
-echo "patch.sh: starting (args: $*) on branch $(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'n/a')"
+#
+# --- Rewrite legacy links in markdown files -----------------------------------
+# Rewrite old links in markdown files to new numbered filenames (BSD/GNU sed-safe)
+rewrite_legacy_links() {
+  # Map of old -> new paths used in file renames above
+  link_maps=(
+    "05-Proxmox-Cluster-Setup.md|06-Proxmox-Cluster-Setup.md"
+    "06-CI-CD-for-Terraform.md|07-CI-CD-for-Terraform.md"
+    "07-Image-Factory.md|08-Image-Factory.md"
+    "08-Core-Infra-VMs.md|09-Core-Infra-VMs.md"
+    "09-Docker-Swarm-Cluster.md|10-Docker-Swarm-Cluster.md"
+    "10-Traefik-Authentik-Public-DNS-VPN.md|11-Traefik-Authentik-Public-DNS-VPN.md"
+    "11-Integration-Pass-1.md|12-Integration-Pass-1.md"
+    "12-Migrations-and-Refactor.md|13-Migrations-and-Refactor.md"
+    "13-Observability-and-Alerting.md|14-Observability-and-Alerting.md"
+    "14-Ops-Readiness.md|15-Ops-Readiness.md"
+    "15-Local-DNS.md|16-Local-DNS.md"
+    "16-DMZ-and-Routing.md|17-DMZ-and-Routing.md"
+    "17-Public-Status-Page-and-Alerting.md|18-Public-Status-Page-and-Alerting.md"
+    "18-Workloads.md|19-Workloads.md"
+    "19-Graduation.md|20-Graduation.md"
+    "04-NAS-Setup.md|05-NAS-Setup.md"
+  )
+  # Target markdown files
+  files=$(ls index.md 2>/dev/null; ls docs/*.md 2>/dev/null)
+  for md in $files; do
+    [ -f "$md" ] || continue
+    for m in "${link_maps[@]}"; do
+      old="${m%%|*}"; new="${m##*|}"
+      # Replace occurrences inside link targets and bare references
+      if ! sed -i '' -e "s|(${old})|(${new})|g" -e "s|'${old}'|'${new}'|g" -e "s|\"${old}\"|\"${new}\"|g" "$md" 2>/dev/null; then
+        sed -e "s|(${old})|(${new})|g" -e "s|'${old}'|'${new}'|g" -e "s|\"${old}\"|\"${new}\"|g" "$md" > "$md.tmp" && mv "$md.tmp" "$md"
+      fi
+    done
+  done
+  echo "Rewrote legacy links in markdown files."
+}
 
+# Rebuild mkdocs.yml nav and refresh repo map
+rebuild_nav() {
+  if [ -f mkdocs.yml ]; then
+    : <<'DISABLED_FAVICONS'
+    # Ensure favicon and touch icons exist and are wired
+    _PNG_1x1_B64="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
+    mkdir -p docs/assets
+    if [ ! -f docs/assets/favicon.png ]; then
+      { printf "%s" "$_PNG_1x1_B64" | base64 -d 2>/dev/null || printf "%s" "$_PNG_1x1_B64" | base64 -D 2>/dev/null; } > docs/assets/favicon.png || true
+      echo "Seeded docs/assets/favicon.png"
+    fi
+    if [ ! -f docs/assets/apple-touch-icon.png ]; then
+      { printf "%s" "$_PNG_1x1_B64" | base64 -d 2>/dev/null || printf "%s" "$_PNG_1x1_B64" | base64 -D 2>/dev/null; } > docs/assets/apple-touch-icon.png || true
+      echo "Seeded docs/assets/apple-touch-icon.png"
+    fi
+    if [ ! -f docs/assets/favicon.ico ]; then
+      cp -f docs/assets/favicon.png docs/assets/favicon.ico 2>/dev/null || cat docs/assets/favicon.png > docs/assets/favicon.ico
+      echo "Seeded docs/assets/favicon.ico"
+    fi
+    if ! grep -q '^site_favicon:' mkdocs.yml; then
+      printf '\nsite_favicon: assets/favicon.png\n' >> mkdocs.yml
+      echo "Set site_favicon: assets/favicon.png"
+    fi
+DISABLED_FAVICONS
+
+    # 1) Build Runbooks block from docs/runbooks/*.md
+    tmp_rb=$(mktemp)
+    {
+      printf "  - Runbooks:\n"
+      LC_ALL=C ls -1 docs/runbooks/*.md 2>/dev/null | LC_ALL=C sort | while read -r f; do
+        [ -e "$f" ] || continue
+        base=$(basename "$f"); slug=${base%.md}
+        title=$(printf "%s" "$slug" | tr '_-' ' ' | awk '{ $1=$1; for(i=1;i<=NF;i++){ w=$i; $i=toupper(substr(w,1,1)) tolower(substr(w,2)) } print }')
+        printf "    - %s: runbooks/%s\n" "$title" "$base"
+      done
+    } > "$tmp_rb"
+    rb_count=$(($(wc -l < "$tmp_rb") - 1))
+    echo "Nav: discovered $rb_count runbook(s)"
+
+    # 2) Extract mkdocs.yml without the existing nav block
+    tmp_base=$(mktemp)
+    awk '
+      BEGIN{inblock=0}
+      /^nav:/ {inblock=1; next}
+      inblock==1 && /^[^[:space:]]/ {inblock=0}
+      inblock==0 {print}
+    ' mkdocs.yml > "$tmp_base"
+
+    # 3) Write a fresh nav block (stable order)
+    tmp_nav=$(mktemp)
+    {
+      echo "nav:"
+      echo "  - Home: index.md"
+      for entry in "${chapters[@]}"; do
+        stem="${entry%%|*}"; rest="${entry#*|}"; title="${rest%%|*}"
+        printf "  - %s: %s\n" "$title" "${stem}.md"
+      done
+      cat <<'YAML_EOF'
+  - Reference:
+    - AI Context: ai-context.md
+    - Glossary: glossary.md
+YAML_EOF
+    } > "$tmp_nav"
+
+    # 4) Append dynamic Runbooks block if any entries exist
+    if [ $(wc -l < "$tmp_rb") -gt 1 ]; then
+      cat "$tmp_rb" >> "$tmp_nav"
+    fi
+
+    # 5) Combine base config + rebuilt nav
+    cat "$tmp_base" "$tmp_nav" > mkdocs.yml.tmp && mv mkdocs.yml.tmp mkdocs.yml
+    echo "Nav: mkdocs.yml rebuilt; runbooks injected ($rb_count)."
+
+    # Ensure core reference files exist and refresh repo map
+    ensure_file "docs/glossary.md" "Glossary (DAT — Define Acronyms & Terms)"
+    ensure_file "docs/ai-context.md" "AI Context (Decisions & Repo Map)"
+    upsert_repo_map
+  fi
+}
+
+#
 # --- Chapter filenames (numbered) -------------------------------------------
 # Format: "FileStem|Nav Title|Icon"
 # File path becomes docs/<NN-FileStem>.md
@@ -197,6 +289,37 @@ chapters=(
   "20-Graduation|Graduation|material/flag-checkered"
   "21-Lab-and-Service-Ideas|Lab & Service Ideas|material/lightbulb-on"
 )
+
+# CLI: split-mode helpers
+if [ $# -gt 0 ]; then
+  case "$1" in
+    --help|-h)
+      usage; exit 0 ;;
+    --ai)
+      shift; append_ai_decision "$*"; exit 0 ;;
+    --verify-map)
+      upsert_repo_map; exit 0 ;;
+    --verify)
+      echo "[DEPRECATED] Use --verify-map instead of --verify." >&2
+      upsert_repo_map
+      exit 0 ;;
+    --nav)
+      RUN_NAV_ONLY=1
+      ;;
+    --full)
+      # fall through to normal full run
+      ;;
+    --rewrite-links)
+      shift
+      rewrite_legacy_links
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2; usage; exit 1 ;;
+  esac
+fi
+# --- end AI Context helpers ---------------------------------------------------
+echo "patch.sh: starting (args: $*) on branch $(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'n/a')"
 
 # Helper: ensure a chapter file exists with a minimal scaffold
 ensure_chapter() {
@@ -315,6 +438,7 @@ for legacy in docs/phase1-foundations.md docs/phase2-networking.md docs/phase5-s
   fi
 done
 
+
 # Ensure all chapter files exist and have front matter with icons
 for entry in "${chapters[@]}"; do
   stem="${entry%%|*}"; rest="${entry#*|}"
@@ -326,6 +450,61 @@ for entry in "${chapters[@]}"; do
     ensure_icon_front_matter "$file" "$icon"
   fi
 done
+
+# Seed Chapter 04 with a structured network outline
+net_file="docs/04-Network-Setup.md"
+if [ ! -f "$net_file" ] || grep -q '_TBD_' "$net_file"; then
+  mkdir -p "$(dirname "$net_file")"
+  cat > "$net_file" <<'EOF'
+---
+icon: material/lan
+---
+# Network Setup & Terraform Imports
+
+## Overview
+Define LAN/VLAN plan, assign CIDRs, configure router/switch, then import discovered resources into Terraform.
+
+## Outcomes
+- VLANs and CIDRs documented and provisioned.
+- Router/firewall interfaces and DHCP scopes configured.
+- Terraform state updated via `terraform import` for existing network objects.
+
+## Entry Checks
+- Router/firewall reachable via UI and SSH.
+- Admin creds and backup exported.
+- Terraform CLI installed and working.
+
+## Labs
+1. **Design the addressing plan**
+   - Choose RFC1918 blocks and per‑VLAN CIDRs.
+   - Reserve infra ranges for gateways, DHCP, DNS, and static hosts.
+2. **Define VLANs and tagging**
+   - Map names → IDs (e.g., `10-MGMT`, `20-SERVERS`, `30-IOT`, `40-GUEST`).
+   - Document trunk and access ports on the switch.
+3. **Configure router/firewall**
+   - Create VLAN interfaces and gateways.
+   - Enable DHCP per VLAN and set DNS.
+   - Add basic inter‑VLAN rules and block guest→LAN.
+4. **Export and import to Terraform**
+   - Initialize provider for your platform.
+   - Use `terraform import` to capture existing VLANs, interfaces, DHCP, and rules.
+   - Run `terraform plan` to verify drift is zero.
+
+## Validation
+- [ ] Hosts on each VLAN receive DHCP and reach gateway.
+- [ ] Expected inter‑VLAN access allowed; blocked paths denied.
+- [ ] `terraform plan` shows no changes after import.
+
+## Exit Criteria
+- [ ] CIDR/VLAN matrix committed to the repo.
+- [ ] Router/switch configs backed up.
+- [ ] Terraform state contains imported network resources.
+
+## Next
+Proceed to NAS setup and Proxmox cluster.
+EOF
+  echo "Seeded $net_file"
+fi
 
 # Seed Chapter 21 with curated ideas (no torrent stack)
 ideas_file="docs/21-Lab-and-Service-Ideas.md"
@@ -360,30 +539,9 @@ EOF
   echo "Seeded $ideas_file"
 fi
 
-: <<'DISABLED_REWRITE'
-# 17b) Rewrite old links in docs/*.md to new numbered filenames
-rewrite_legacy_links=(
-  "workstation-setup.md|02-Workstation-Setup.md"
-  "cloud-control-plane-setup.md|03-Cloud-Accounts-and-Foundations.md"
-  "hardware.md|01-Hardware.md"
-  "phase3-storage-backups.md|04-NAS-Setup.md"
-  "control-plane.md|05-Proxmox-Cluster-Setup.md"
-  "migration.md|12-Migrations-and-Refactor.md"
-  "phase4-observability.md|13-Observability-and-Alerting.md"
-  "phase6-first-workloads.md|18-Workloads.md"
-  "release.md|19-Graduation.md"
-)
-for md in docs/*.md; do
-  [ -f "$md" ] || continue
-  for m in "${link_maps[@]}"; do
-    old="${m%%|*}"; new="${m##*|}"
-    # Replace occurrences inside () link targets and bare references
-    if ! sed -i '' -e "s|(${old})|(${new})|g" -e "s|'${old}'|'${new}'|g" -e "s|\"${old}\"|\"${new}\"|g" "$md" 2>/dev/null; then
-      sed -e "s|(${old})|(${new})|g" -e "s|'${old}'|'${new}'|g" -e "s|\"${old}\"|\"${new}\"|g" "$md" > "$md.tmp" && mv "$md.tmp" "$md"
-    fi
-  done
-done
-DISABLED_REWRITE
+
+# 17b) Rewrite links after renames
+rewrite_legacy_links
 
 # 18) Rebuild nav deterministically and inject dynamic Runbooks
 rebuild_nav
@@ -397,84 +555,3 @@ if command -v git >/dev/null 2>&1; then
   echo "----- git status (short) -----"
   git status -sb 2>/dev/null || git status || true
 fi
-
-#
-# Rebuild mkdocs.yml nav and refresh repo map
-rebuild_nav() {
-  if [ -f mkdocs.yml ]; then
-    : <<'DISABLED_FAVICONS'
-    # Ensure favicon and touch icons exist and are wired
-    _PNG_1x1_B64="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
-    mkdir -p docs/assets
-    if [ ! -f docs/assets/favicon.png ]; then
-      { printf "%s" "$_PNG_1x1_B64" | base64 -d 2>/dev/null || printf "%s" "$_PNG_1x1_B64" | base64 -D 2>/dev/null; } > docs/assets/favicon.png || true
-      echo "Seeded docs/assets/favicon.png"
-    fi
-    if [ ! -f docs/assets/apple-touch-icon.png ]; then
-      { printf "%s" "$_PNG_1x1_B64" | base64 -d 2>/dev/null || printf "%s" "$_PNG_1x1_B64" | base64 -D 2>/dev/null; } > docs/assets/apple-touch-icon.png || true
-      echo "Seeded docs/assets/apple-touch-icon.png"
-    fi
-    if [ ! -f docs/assets/favicon.ico ]; then
-      cp -f docs/assets/favicon.png docs/assets/favicon.ico 2>/dev/null || cat docs/assets/favicon.png > docs/assets/favicon.ico
-      echo "Seeded docs/assets/favicon.ico"
-    fi
-    if ! grep -q '^site_favicon:' mkdocs.yml; then
-      printf '\nsite_favicon: assets/favicon.png\n' >> mkdocs.yml
-      echo "Set site_favicon: assets/favicon.png"
-    fi
-DISABLED_FAVICONS
-
-    # 1) Build Runbooks block from docs/runbooks/*.md
-    tmp_rb=$(mktemp)
-    {
-      printf "  - Runbooks:\n"
-      LC_ALL=C ls -1 docs/runbooks/*.md 2>/dev/null | LC_ALL=C sort | while read -r f; do
-        [ -e "$f" ] || continue
-        base=$(basename "$f"); slug=${base%.md}
-        title=$(printf "%s" "$slug" | tr '_-' ' ' | awk '{ $1=$1; for(i=1;i<=NF;i++){ w=$i; $i=toupper(substr(w,1,1)) tolower(substr(w,2)) } print }')
-        printf "    - %s: runbooks/%s\n" "$title" "$base"
-      done
-    } > "$tmp_rb"
-    rb_count=$(($(wc -l < "$tmp_rb") - 1))
-    echo "Nav: discovered $rb_count runbook(s)"
-
-    # 2) Extract mkdocs.yml without the existing nav block
-    tmp_base=$(mktemp)
-    awk '
-      BEGIN{inblock=0}
-      /^nav:/ {inblock=1; next}
-      inblock==1 && /^[^[:space:]]/ {inblock=0}
-      inblock==0 {print}
-    ' mkdocs.yml > "$tmp_base"
-
-    # 3) Write a fresh nav block (stable order)
-    tmp_nav=$(mktemp)
-    {
-      echo "nav:"
-      echo "  - Home: index.md"
-      for entry in "${chapters[@]}"; do
-        stem="${entry%%|*}"; rest="${entry#*|}"; title="${rest%%|*}"
-        printf "  - %s: %s\n" "$title" "${stem}.md"
-      done
-      cat <<'YAML_EOF'
-  - Reference:
-    - AI Context: ai-context.md
-    - Glossary: glossary.md
-YAML_EOF
-    } > "$tmp_nav"
-
-    # 4) Append dynamic Runbooks block if any entries exist
-    if [ $(wc -l < "$tmp_rb") -gt 1 ]; then
-      cat "$tmp_rb" >> "$tmp_nav"
-    fi
-
-    # 5) Combine base config + rebuilt nav
-    cat "$tmp_base" "$tmp_nav" > mkdocs.yml.tmp && mv mkdocs.yml.tmp mkdocs.yml
-    echo "Nav: mkdocs.yml rebuilt; runbooks injected ($rb_count)."
-
-    # Ensure core reference files exist and refresh repo map
-    ensure_file "docs/glossary.md" "Glossary (DAT — Define Acronyms & Terms)"
-    ensure_file "docs/ai-context.md" "AI Context (Decisions & Repo Map)"
-    upsert_repo_map
-  fi
-}

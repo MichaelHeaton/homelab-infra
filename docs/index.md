@@ -44,8 +44,8 @@ No need for a supercomputer; we start with what you’ve got and level up from t
 
 - [Glossary](glossary.md) — DAT: your hacker’s codex for all acronyms, jargon, slang, and domain terms.
 - [Runbooks](runbooks/resolve_conflicts.md) — step-by-step exploits and procedures.
-- [Migration](12-Migrations-and-Refactor.md) — strategies for shifting workloads to new hardware nodes.
-- [Control Plane](05-Proxmox-Cluster-Setup.md) — cloud-hosted orchestration & services.
+- [Migration](13-Migrations-and-Refactor.md) — strategies for shifting workloads to new hardware nodes.
+- [Control Plane](06-Proxmox-Cluster-Setup.md) — cloud-hosted orchestration & services.
 
 ---
 
