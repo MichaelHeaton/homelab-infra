@@ -1,0 +1,60 @@
+# Managed by Ansible
+auto lo
+iface lo inet loopback
+{% set mgmt_parent = pve_hosts[inventory_hostname].mgmt_if %}
+{% set mgmt_is_tagged = pve_hosts[inventory_hostname].mgmt_tagged | default(false) %}
+{% set mgmt_port = (mgmt_parent ~ '.' ~ pve_vlan_mgmt) if mgmt_is_tagged else mgmt_parent %}
+{% set cluster_parent = pve_hosts[inventory_hostname].trunk_if if pve_hosts[inventory_hostname].want_trunk else pve_hosts[inventory_hostname].mgmt_if %}
+
+# --- MGMT bridge on VLAN {{ pve_vlan_mgmt }}
+auto {{ pve_bridge_mgmt }}
+iface {{ pve_bridge_mgmt }} inet static
+  address {{ pve_hosts[inventory_hostname].mgmt_ip }}
+  gateway {{ pve_hosts[inventory_hostname].gw }}
+  bridge_ports {{ mgmt_port }}
+  bridge_stp off
+  bridge_fd 0
+
+{% if mgmt_is_tagged %}
+# parent for mgmt vlan
+auto {{ mgmt_parent }}.{{ pve_vlan_mgmt }}
+iface {{ mgmt_parent }}.{{ pve_vlan_mgmt }} inet manual
+  vlan-raw-device {{ mgmt_parent }}
+{% endif %}
+
+# --- Cluster/Corosync VLAN {{ pve_vlan_cluster }} with static IP
+auto {{ cluster_parent }}.{{ pve_vlan_cluster }}
+iface {{ cluster_parent }}.{{ pve_vlan_cluster }} inet static
+  address {{ pve_hosts[inventory_hostname].cluster_ip }}
+  vlan-raw-device {{ cluster_parent }}
+
+{# --- Storage VLAN handling when no dedicated trunk NIC #}
+{% if not pve_hosts[inventory_hostname].want_trunk and pve_hosts[inventory_hostname].storage_ip is defined %}
+# Storage VLAN {{ pve_vlan_storage }} with static IP on management parent
+auto {{ mgmt_parent }}.{{ pve_vlan_storage }}
+iface {{ mgmt_parent }}.{{ pve_vlan_storage }} inet static
+  address {{ pve_hosts[inventory_hostname].storage_ip }}
+  vlan-raw-device {{ mgmt_parent }}
+{% endif %}
+
+{% if pve_hosts[inventory_hostname].want_trunk %}
+# set jumbo MTU on the physical trunk NIC so bridges inherit
+auto {{ pve_hosts[inventory_hostname].trunk_if }}
+iface {{ pve_hosts[inventory_hostname].trunk_if }} inet manual
+  mtu 9000
+
+# --- TRUNK bridge for cluster/storage VLANs
+auto {{ pve_bridge_trunk }}
+{% if pve_hosts[inventory_hostname].storage_ip is defined %}
+iface {{ pve_bridge_trunk }} inet static
+  address {{ pve_hosts[inventory_hostname].storage_ip }}
+  bridge_ports {{ pve_hosts[inventory_hostname].trunk_if }}
+  bridge_stp off
+  bridge_fd 0
+{% else %}
+iface {{ pve_bridge_trunk }} inet manual
+  bridge_ports {{ pve_hosts[inventory_hostname].trunk_if }}
+  bridge_stp off
+  bridge_fd 0
+{% endif %}
+{% endif %}

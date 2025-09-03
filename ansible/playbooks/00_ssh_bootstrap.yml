@@ -1,0 +1,40 @@
+- name: SSH bootstrap for PVE nodes
+  hosts: pve
+  gather_facts: false
+  become: false
+  vars:
+    home_dir: "{{ lookup('env', 'HOME') }}"
+    pubkey_ed25519: "{{ home_dir + '/.ssh/id_ed25519.pub' }}"
+    pubkey_rsa: "{{ home_dir + '/.ssh/id_rsa.pub' }}"
+    ssh_port: 22
+  pre_tasks:
+    - name: Select local public key path
+      ansible.builtin.set_fact:
+        local_pubkey_path: >-
+          {{ pubkey_ed25519 if lookup('fileglob', pubkey_ed25519, errors='ignore') else pubkey_rsa }}
+    - name: Ensure a local SSH public key exists
+      ansible.builtin.assert:
+        that:
+          - lookup('file', local_pubkey_path, errors='ignore') | length > 0
+        fail_msg: "No local SSH public key found at {{ local_pubkey_path }}. Create one with: ssh-keygen -t ed25519"
+  tasks:
+    - name: Add remote host key to local known_hosts (no prompt)
+      delegate_to: localhost
+      ansible.builtin.known_hosts:
+        name: "{{ hostvars[inventory_hostname].ansible_host }}"
+        key: "{{ lookup('pipe', 'ssh-keyscan -p ' ~ ssh_port ~ ' -t ed25519 ' ~ hostvars[inventory_hostname].ansible_host) }}"
+        path: "{{ lookup('env', 'HOME') + '/.ssh/known_hosts' }}"
+
+    - name: Create root .ssh directory
+      ansible.builtin.file:
+        path: /root/.ssh
+        state: directory
+        owner: root
+        group: root
+        mode: '0700'
+
+    - name: Install our public key into root authorized_keys
+      ansible.posix.authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', local_pubkey_path) }}"

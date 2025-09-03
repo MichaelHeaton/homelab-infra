@@ -5,7 +5,7 @@ icon: material/harddisk
 
 !!! info "Quick Overview"
     **What:** Prepare a Synology NAS (and optional UNAS) for homelab use.
-    **Why:** NAS is the foundation for VM storage, backups, and media.
+    **Why:** NAS is the foundation for VM storage, PBS backups, media, and container data.
     **Time:** 60–120 minutes.
     **XP:** Up to 90 points.
 
@@ -16,9 +16,10 @@ icon: material/harddisk
 
 ## Outcomes
 - Shares and permissions codified via UI or automation
-- NFS/SMB exports ready for Proxmox and other hosts
+- NFS/iSCSI/SMB exports ready for Proxmox, PBS, and other hosts
 - Snapshot policy baseline defined and validated
-- Optional: NAS Docker environment enabled for seed services
+- NAS01 NTP service enabled for LAN fallback
+- Optional: lightweight Docker environment enabled for seed services (Portainer, CI/CD tools)
 
 Storage is where your homelab lives. This chapter gets your Synology and UNAS ready for shares, snapshots, and even container workloads.
 
@@ -51,17 +52,19 @@ Storage is where your homelab lives. This chapter gets your Synology and UNAS re
 ### Lab 5.1: Planned NAS Layout (iSCSI, NFS, default shares)
 
 ### iSCSI Shares
-- `vm-store` (Proxmox VM storage)
-- `pbs-backups` (Proxmox Backup Server target)
-- `db-lun` (Database workloads)
-- `docker-lun` (Docker persistent data)
-- `k8s-pv` (Kubernetes persistent volumes)
+- `vm-store` (Proxmox VM datastore, default)
+- `pbs-backups` (Proxmox Backup Server datastore)
+- `db-lun` (Databases needing block storage, optional)
+- `docker-lun` (Persistent container data, optional)
+- `k8s-pv` (Kubernetes persistent volumes, optional)
 
 ### NFS Shares
-- `/Homes` (user home directories, Synology defaults)
+- `/Homes` (user home directories, Synology default)
 - `/Photo` (Synology Photos service)
-- `/Download` (general downloads)
-- `/Media` (Plex and related media storage)
+- `/Download` (general downloads, optional)
+- `/Media` (Plex and related media storage, served from NAS02)
+
+NAS01 is primary for VM/backup workloads. NAS02 is reserved for media (NFS only).
 
 **Default Synology Shares**
 - `/home` and `/homes` (keep – user private directories, family network homes)
@@ -69,6 +72,7 @@ Storage is where your homelab lives. This chapter gets your Synology and UNAS re
 - `/music` (drop – only used by Audio Station, not needed with Plex)
 - `/video` (drop – only used by Video Station, Plex/UNAS will be used instead)
 - `/surveillance` (skip – only created if Surveillance Station is enabled)
+- `/docker` (drop – only used for Synology Docker, not needed with Portainer/Proxmox)
 
 #### Validation
 - [ ] Layout documented and approved
@@ -118,7 +122,7 @@ Storage is where your homelab lives. This chapter gets your Synology and UNAS re
 
 ### Lab 5.A: Introduction to RAID, NFS, and iSCSI (explanation and why they matter in homelab setup)
 
-### Lab 5.B: Best practices for setting up a NAS/Synology (covering user management, folder structure, snapshots, and backups)
+### Lab 5.B: Best practices for setting up a NAS/Synology (covering user management, folder structure, snapshots, and backups) Also configure the NAS to provide NTP service for the LAN (Control Panel → Regional Options → Time → NTP Service).
 
 ## Background Concepts
 - **RAID:** A method of combining multiple hard drives into a single unit to improve performance and/or provide redundancy to protect data in case of drive failure.
@@ -127,10 +131,11 @@ Storage is where your homelab lives. This chapter gets your Synology and UNAS re
 
 ## Exit Criteria
 - [ ] Shares and exports are configured and validated
-- [ ] Snapshot policies active
-- [ ] Optional Docker workloads deployed (if enabled)
+- [ ] Snapshot and replication policies active
+- [ ] NAS01 NTP service enabled and validated
+- [ ] Optional container workloads deployed (if enabled)
 - [ ] UNAS exports validated
 - [ ] Docker workloads deployed via Portainer
-- [ ] Core Docker workloads (Portainer, Homepage, Vault, Consul) deployed and validated
+- [ ] Core workloads (Portainer, Homepage, Vault, Consul, PBS integration) deployed and validated
 
 > 🎉 Chapter Complete! You’ve earned up to 90 XP. Storage fortress online!

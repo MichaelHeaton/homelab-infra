@@ -10,8 +10,8 @@ crash.log
 crash.*.log
 
 # Exclude all .tfvars files, which are likely to contain sensitive data, such as
-# password, private keys, and other secrets. These should not be part of version 
-# control as they are data points which are potentially sensitive and subject 
+# password, private keys, and other secrets. These should not be part of version
+# control as they are data points which are potentially sensitive and subject
 # to change depending on the environment.
 *.tfvars
 *.tfvars.json
@@ -76,3 +76,74 @@ docker/**/.env.*
 site/
 
 __pycache__/
+
+# -------- macOS --------
+.DS_Store
+.AppleDouble
+.LSOverride
+logs/
+.scratch/
+
+# -------- Editors / IDE --------
+.vscode/
+.idea/
+
+# -------- Python --------
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.venv/
+*.snap.venv/
+.mypy_cache/
+.pytest_cache/
+.tox/
+
+# -------- Terraform --------
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Local Terraform secrets (keep only the .gitkeep)
+terraform/envs/*/secrets/**
+!terraform/envs/*/secrets/.gitkeep
+terraform/**/secrets/
+
+# -------- Ansible --------
+*.retry
+*.log
+.inventory
+ansible/.cache/
+ansible/**/.vault_pass*
+ansible/**/vault-pass.txt
+ansible/**/group_vars/*vault*.yml
+ansible/**/host_vars/*vault*.yml
+
+# -------- Docker / Compose --------
+# Folders in docker/ starting with '_' are conventionally used for local or ignored resources.
+# Ignore all docker/_*/ folders, but keep existing patterns intact.
+docker/_*/
+docker/**/.env
+docker/**/.env.*
+docker/**/compose.override.yml
+docker/**/compose*.override.yml
+docker/**/data/
+docker/**/tmp/
+
+# -------- Docs build output --------
+site/
+
+# -------- Dotenv / local config --------
+.env
+.env.*
+inventory/

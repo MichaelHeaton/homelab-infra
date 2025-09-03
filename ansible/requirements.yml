@@ -1,0 +1,9 @@
+---
+collections:
+  - name: ansible.posix
+    version: ">=1.5.4,<2.0.0"
+  - name: community.general
+    version: ">=8.5.0,<10.0.0"
+  - name: https://github.com/ansible-collections/community.proxmox.git
+    type: git
+    version: main   # or a specific tag/commit
