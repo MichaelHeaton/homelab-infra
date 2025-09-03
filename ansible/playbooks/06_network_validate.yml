@@ -1,0 +1,11 @@
+- name: Validate basic network reachability
+  hosts: pve
+  gather_facts: false
+  tasks:
+    - name: Ping gateways and NAS
+      ansible.builtin.command: bash -lc "ping -c2 172.16.15.1 && ping -c2 172.16.30.5 && ping -c2 172.16.30.4 || true"
+      register: pings
+      changed_when: false
+    - name: Show ping results
+      ansible.builtin.debug:
+        var: pings.stdout_lines

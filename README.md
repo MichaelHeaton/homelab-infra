@@ -70,6 +70,28 @@ mkdocs build
 
 Docs are deployed by GitHub Actions to the `gh-pages` branch when changes are merged to `main`.
 
+## Using Ansible
+
+All Ansible content is stored under the `ansible/` directory. Best practice is to run playbooks from the **repo root** so paths resolve consistently.
+
+Example commands:
+
+```bash
+# Dry-run a playbook (check mode)
+ansible-playbook ansible/playbooks/05_network_config.yml --check
+
+# Apply to a single host
+ansible-playbook -l gpu01 ansible/playbooks/05_network_config.yml
+
+# Run facts gathering
+ansible-playbook ansible/playbooks/01_network_facts.yml
+```
+
+Notes:
+- `ansible/ansible.cfg` is symlinked at repo root as `./ansible.cfg` so it is always picked up.
+- Inventory is located at `ansible/inventories/hosts.yml`.
+- Templates are under `ansible/templates/`.
+
 ## Contributing
 
 Contributions are welcome! Please submit pull requests or issues for improvements or bug fixes.

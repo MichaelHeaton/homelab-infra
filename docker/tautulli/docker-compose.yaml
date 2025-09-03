@@ -1,0 +1,25 @@
+---
+# Tautulli - https://tautulli.com
+# Docker - https://hub.docker.com/r/linuxserver/tautulli
+# mkdir /volume1/docker/appdata/tautulli
+# ln /volume1/docker/appdata/.env /volume1/docker/appdata/tautulli/.env
+version: "0.2"
+services:
+  tautulli:
+    container_name: tautulli
+    image: lscr.io/linuxserver/tautulli:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/tautulli/config/:/config
+    ports:
+      - 8181:8181
