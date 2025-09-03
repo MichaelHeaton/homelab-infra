@@ -1,0 +1,1367 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://michaelheaton.github.io/homelab-infra/06-Proxmox-Cluster-Setup/">
+      
+      
+        <link rel="prev" href="../05-NAS-Setup/">
+      
+      
+        <link rel="next" href="../ai-context/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Proxmox Cluster Setup - Homelab Infra</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#proxmox-cluster-setup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Homelab Infra" class="md-header__button md-logo" aria-label="Homelab Infra" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Homelab Infra
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Proxmox Cluster Setup
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/MichaelHeaton/homelab-infra" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MichaelHeaton/homelab-infra
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Homelab Infra" class="md-nav__button md-logo" aria-label="Homelab Infra" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    Homelab Infra
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/MichaelHeaton/homelab-infra" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MichaelHeaton/homelab-infra
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-Hardware/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 17H7V7h10m4 4V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7c-1.11 0-2 .89-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2m-6 2h-2v-2h2m2-2H9v6h6z"/></svg>
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-Workstation-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v10H4m16 2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4c-1.11 0-2 .89-2 2v10a2 2 0 0 0 2 2H0v2h24v-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    Workstation Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-Cloud-Accounts-and-Foundations/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
+  
+  <span class="md-ellipsis">
+    Cloud Accounts & Foundations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-Network-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h1v2H2v2h4v2H5c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2H8v-2h8v2h-1c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2h-1v-2h4v-2h-9V9h1c1.11 0 2-.89 2-2V4c0-1.11-.89-2-2-2zm0 2h4v3h-4zM5 17h4v3H5zm10 0h4v3h-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    Network Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-NAS-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m6 2a6 6 0 0 0-6 6c0 3.31 2.69 6 6.1 6l-.88-2.23a1.01 1.01 0 0 1 .37-1.37l.86-.5a1.01 1.01 0 0 1 1.37.37l1.92 2.42A5.98 5.98 0 0 0 18 10a6 6 0 0 0-6-6m0 5a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-5 9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m5.09-4.73 2.49 6.31 2.59-1.5-4.22-5.31z"/></svg>
+  
+  <span class="md-ellipsis">
+    NAS Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1M9 5h1V3H9zm0 8h1v-2H9zm0 8h1v-2H9zM5 3v2h2V3zm0 8v2h2v-2zm0 8v2h2v-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    Proxmox Cluster Setup
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1M9 5h1V3H9zm0 8h1v-2H9zm0 8h1v-2H9zM5 3v2h2V3zm0 8v2h2v-2zm0 8v2h2v-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    Proxmox Cluster Setup
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#entry-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entry Checks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-decisions-pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cluster Decisions Pending
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#time-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      Time Sync
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#labs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Labs
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-context/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 14h-1c0-3.87-3.13-7-7-7h-1V5.73A2 2 0 1 0 10 4c0 .74.4 1.39 1 1.73V7h-1c-3.87 0-7 3.13-7 7H2c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h1v1a2 2 0 0 0 2 2h14c1.11 0 2-.89 2-2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1M9.79 16.5C9.4 15.62 8.53 15 7.5 15s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1m9 0c-.39-.88-1.29-1.5-2.29-1.5s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1"/></svg>
+  
+  <span class="md-ellipsis">
+    AI Context
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 14h-1c0-3.87-3.13-7-7-7h-1V5.73A2 2 0 1 0 10 4c0 .74.4 1.39 1 1.73V7h-1c-3.87 0-7 3.13-7 7H2c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h1v1a2 2 0 0 0 2 2h14c1.11 0 2-.89 2-2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1M9.79 16.5C9.4 15.62 8.53 15 7.5 15s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1m9 0c-.39-.88-1.29-1.5-2.29-1.5s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1"/></svg>
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Runbooks
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Runbooks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runbooks/resolve_conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Resolve Conflicts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runbooks/vault_bootstrap_runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Vault Bootstrap Runbook
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="proxmox-cluster-setup">Proxmox Cluster Setup<a class="headerlink" href="#proxmox-cluster-setup" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Quick Overview</p>
+<p><strong>What:</strong> Prepare and build a 3-node Proxmox cluster with storage and networking.
+<strong>Why:</strong> Clustering unlocks High Availability (<abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr>), shared storage, and scaling for your homelab.
+<strong>Time:</strong> 90–150 minutes.
+<strong>XP:</strong> Up to 100 points (like Whose Line, the points are made up but the fun is real).</p>
+</div>
+<h2 id="outcomes">Outcomes<a class="headerlink" href="#outcomes" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Proxmox installed and nodes joined into a cluster</li>
+<li>Cluster storage configured and accessible</li>
+<li>Networks segmented (management, storage, workloads)</li>
+<li>Baseline Virtual Machines (VMs) created for Consul + Vault</li>
+</ul>
+<p>Now it’s time to link your nodes into a unified cluster. Proper Network Interface Card (<abbr title="Network Interface Card, hardware for network connectivity">NIC</abbr>) setup, storage connections, and <abbr title="Virtual Machine, emulated computer instance">VM</abbr> baselines will give you a resilient backbone for your homelab.</p>
+<div class="admonition warning">
+<p class="admonition-title">Before forming the cluster</p>
+<ul>
+<li>Put the <strong>cluster (ring0) <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> first</strong> in <code>/etc/hosts</code> for each node's canonical name (e.g., <code>GPU01</code>).</li>
+<li>Ensure <strong>management <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr></strong> is a separate alias/line (e.g., <code>GPU01-mgmt</code>).</li>
+<li>Make sure <strong>time is in sync</strong> across all nodes (see <em>Time Sync</em> below).</li>
+<li>Verify <strong><abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> reachability</strong> for mgmt (15), cluster (12), and storage (30).</li>
+</ul>
+</div>
+<h2 id="entry-checks">Entry Checks<a class="headerlink" href="#entry-checks" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Hardware nodes available and reachable on the network</li>
+<li>Admin workstation can reach Proxmox web User Interface (<abbr title="User Interface, the visual or interactive system for managing and using software">UI</abbr>)</li>
+<li>Virtual Local Area Networks (VLANs) planned and documented</li>
+<li><abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> watchdog playbook ready to run on all nodes</li>
+</ul>
+<h2 id="cluster-decisions-pending">Cluster Decisions Pending<a class="headerlink" href="#cluster-decisions-pending" title="Permanent link">&para;</a></h2>
+<p>Track and lock decisions that affect automation and later migrations.</p>
+<ul class="task-list">
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>Auth model (now → later):</strong> start with <code>root@pam</code> + <abbr title="Application Programming Interface, rules and definitions for software communication">API</abbr> tokens; migrate to <abbr title="Single Sign-On, authentication system enabling one login for multiple services">SSO</abbr>/LDAP later.
+  <em>Impact:</em> inventories use pam credentials initially; plan a credential rotation runbook.</p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>TLS certificates:</strong> start with self-signed on all nodes; migrate to Let's Encrypt (<abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr>-01) later.
+  <em>Impact:</em> Terraform/Ansible set <code>validate_certs: false</code> initially; flip to true after cert rollout.</p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>Template strategy:</strong> standardize template IDs <strong>9000–9099</strong> and names like <code>tmpl-ubuntu-24.04.3-amd64</code>.
+  <em>Impact:</em> Terraform references stable template IDs; CI can rebuild templates safely.</p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong><abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> retention defaults:</strong> daily <strong>7</strong>, weekly <strong>4</strong>, monthly <strong>6</strong>.
+  <em>Note:</em> Per-<abbr title="Virtual Machine, emulated computer instance">VM</abbr> overrides allowed as services come online.</p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Monitoring stack host:</strong> defer until cluster is live.
+  <em>Plan:</em> Deploy Prometheus + exporters after base cluster and <abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> are running.</p>
+</li>
+<li class="task-list-item">
+<p><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>Fencing/<abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> watchdog:</strong> verify watchdog support on GPU01, NUC01, NUC02; enable Proxmox <abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> stack.
+  <em>Steps:</em>
+    1) Check <code>dmesg | grep -i watchdog</code> and <code>lsmod | grep -i watchdog</code>
+    2) If absent, enable <code>softdog</code> temporarily or vendor-specific module if available
+    3) Confirm <code>pve-ha-lrm</code> and <code>pve-ha-crm</code> services are active
+    4) Document final fencing method</p>
+</li>
+</ul>
+<h2 id="time-sync">Time Sync<a class="headerlink" href="#time-sync" title="Permanent link">&para;</a></h2>
+<h3 id="time-sync-configuration">Time Sync Configuration<a class="headerlink" href="#time-sync-configuration" title="Permanent link">&para;</a></h3>
+<p>Accurate and consistent time is critical for Proxmox clustering, Corosync quorum, <abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr>, and logs.</p>
+<p><strong>Plan: Hybrid NTP setup</strong>
+- <strong>Primary:</strong> <code>132.163.96.1</code> and <code>129.6.15.28</code> (NIST official servers).
+- <strong>Secondary (LAN fallback):</strong> NAS01 at <code>172.16.0.5</code> with NTP Service enabled in <abbr title="DiskStation Manager, Synology's operating system for NAS devices">DSM</abbr> (Control Panel → Regional Options → Time).</p>
+<p><strong>Implementation</strong>
+1. On NAS01, enable the built-in NTP Service.
+2. On all Proxmox nodes (GPU01, NUC01, NUC02), configure NTP servers:
+   - <code>132.163.96.1</code>
+   - <code>129.6.15.28</code>
+   - <code>172.16.0.5</code>
+   <strong>Note (Proxmox specifics):</strong> On Proxmox, you might not see a <code>systemd-timesyncd.service</code> unit even though <code>timedatectl</code> reports NTP as <em>active</em>. Configure servers and check sync via:
+   <div class="highlight"><pre><span></span><code>timedatectl<span class="w"> </span>set-ntp<span class="w"> </span><span class="nb">true</span>
+timedatectl<span class="w"> </span>show-timesync<span class="w"> </span>--all<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;1,80p&#39;</span>
+timedatectl<span class="w"> </span>status
+date
+</code></pre></div>
+   If you prefer a full NTP daemon, install and configure <code>chrony</code> instead of relying on the minimal timesync stub.
+3. Verify with <code>timedatectl show-timesync --all</code> that both sources are listed and sync is stable.
+4. <abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> <abbr title="Virtual Machine, emulated computer instance">VM</abbr> will inherit this config from its Proxmox host.
+5. Optional: monitor NTP drift with Prometheus node_exporter.</p>
+<h4 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> NTP service enabled on NAS01</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> All cluster nodes use both 132.163.96.1, 129.6.15.28, and NAS01 as time sources
+🏆 Achievement Unlocked: Cluster clocks in sync!</li>
+</ul>
+<h2 id="labs">Labs<a class="headerlink" href="#labs" title="Permanent link">&para;</a></h2>
+<h3 id="61-nic-setup-for-single-vs-multiple-network-interface-cards-nics">6.1 <abbr title="Network Interface Card, hardware for network connectivity">NIC</abbr> Setup for single vs multiple Network Interface Cards (NICs)<a class="headerlink" href="#61-nic-setup-for-single-vs-multiple-network-interface-cards-nics" title="Permanent link">&para;</a></h3>
+<p>Explain benefits and that Network Interface Cards (NICs) should be configured before cluster creation.</p>
+<h4 id="validation_1">Validation<a class="headerlink" href="#validation_1" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Network Interface Cards (NICs) configured before cluster join
+🏆 Achievement Unlocked: Network interfaces ready!</li>
+</ul>
+<h3 id="61b-validate-vlan-reachability">6.1b Validate <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> reachability<a class="headerlink" href="#61b-validate-vlan-reachability" title="Permanent link">&para;</a></h3>
+<p>Before forming the cluster, verify that all VLANs are properly configured and reachable from each node.</p>
+<h4 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h4>
+<ol>
+<li>From GPU01, NUC01, and NUC02:
+   <div class="highlight"><pre><span></span><code>ping<span class="w"> </span><span class="m">172</span>.16.15.1<span class="w">     </span><span class="c1"># VLAN 15 gateway (Mgmt)</span>
+ping<span class="w"> </span><span class="m">172</span>.16.12.1<span class="w">     </span><span class="c1"># VLAN 12 gateway (Cluster/Corosync, if routed)</span>
+ping<span class="w"> </span><span class="m">172</span>.16.30.5<span class="w">     </span><span class="c1"># NAS01 storage NIC</span>
+ping<span class="w"> </span><span class="m">172</span>.16.30.4<span class="w">     </span><span class="c1"># NAS02 storage NIC</span>
+</code></pre></div></li>
+<li>Check routing tables on each node (<code>ip route</code>) to confirm correct gateways.</li>
+<li>Verify <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> tagging on switch ports for each server <abbr title="Network Interface Card, hardware for network connectivity">NIC</abbr>.</li>
+<li>Adjust Proxmox network config (<code>/etc/network/interfaces</code>) if rebuild resets them.</li>
+</ol>
+<h4 id="validation_2">Validation<a class="headerlink" href="#validation_2" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> GPU01, NUC01, and NUC02 can reach <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 15 (Mgmt)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> GPU01 can reach <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 12 (Cluster) and <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 30 (Storage)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> NUC01 and NUC02 can reach <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 30 if required for storage</li>
+</ul>
+<p>🏆 Achievement Unlocked: VLANs alive and reachable!</p>
+<h3 id="61c-hostname-etchosts-requirements-critical">6.1c Hostname &amp; <code>/etc/hosts</code> requirements (critical)<a class="headerlink" href="#61c-hostname-etchosts-requirements-critical" title="Permanent link">&para;</a></h3>
+<p>Corosync will bind to the address that your node's <strong>canonical hostname</strong> resolves to. Ensure the cluster <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> (<abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 12) is first for the node's primary name, and keep management/storage on separate aliases.</p>
+<p><strong>Example <code>/etc/hosts</code> on GPU01</strong>
+<div class="highlight"><pre><span></span><code>127.0.0.1       localhost
+::1             localhost
+
+# PVE node – put CLUSTER IP first
+172.16.12.10    GPU01.SpecterRealm.com GPU01 gpu01.local gpu01
+# Mgmt IP as separate alias
+172.16.15.10    GPU01-mgmt.SpecterRealm.com GPU01-mgmt
+# Storage IP as separate alias (optional)
+172.16.30.10    GPU01-stor.SpecterRealm.com GPU01-stor
+</code></pre></div></p>
+<p><strong>Validation</strong>
+<div class="highlight"><pre><span></span><code>getent<span class="w"> </span>hosts<span class="w"> </span><span class="k">$(</span>hostname<span class="w"> </span>-s<span class="k">)</span><span class="w">     </span><span class="c1"># should return the ring0/cluster IP first</span>
+hostname<span class="w"> </span>-I<span class="w">                      </span><span class="c1"># verify the expected addresses exist</span>
+</code></pre></div></p>
+<h3 id="62-create-proxmox-cluster-across-nodea-nodeb-nodec">6.2 Create Proxmox cluster across NodeA, NodeB, NodeC<a class="headerlink" href="#62-create-proxmox-cluster-across-nodea-nodeb-nodec" title="Permanent link">&para;</a></h3>
+<p><strong>Note:</strong> GPU01 is the primary cluster manager and the first node in the cluster.</p>
+<h4 id="understanding-quorum-and-qdevice">Understanding Quorum and QDevice<a class="headerlink" href="#understanding-quorum-and-qdevice" title="Permanent link">&para;</a></h4>
+<p>Quorum is the mechanism that ensures cluster consistency by requiring a majority of nodes to be online and communicating. To improve quorum reliability, a QDevice can be added as a tie-breaker. NAS01 can later serve as a QDevice host if a node is removed or travels, helping maintain cluster availability.</p>
+<h4 id="validation_3">Validation<a class="headerlink" href="#validation_3" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Cluster created with quorum
+🏆 Achievement Unlocked: Cluster formed!</li>
+</ul>
+<h4 id="62a-join-via-cli-fallback-when-api-join-errors-with-csrf">6.2a Join via <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> (fallback when <abbr title="Application Programming Interface, rules and definitions for software communication">API</abbr> join errors with CSRF)<a class="headerlink" href="#62a-join-via-cli-fallback-when-api-join-errors-with-csrf" title="Permanent link">&para;</a></h4>
+<p>If the <abbr title="Application Programming Interface, rules and definitions for software communication">API</abbr>-based join fails with <code>Permission denied - invalid csrf token</code>, use the SSH join workflow:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># On the joining node (e.g., NUC01/NUC02)</span>
+pvecm<span class="w"> </span>add<span class="w"> </span>GPU01.SpecterRealm.com<span class="w"> </span>--use_ssh<span class="w">         </span><span class="c1"># or: pvecm add 172.16.12.10 --use_ssh</span>
+<span class="c1"># If the node was partially joined before, add --force:</span>
+pvecm<span class="w"> </span>add<span class="w"> </span><span class="m">172</span>.16.12.10<span class="w"> </span>--use_ssh<span class="w"> </span>--force
+</code></pre></div>
+<p><strong>Why this helps:</strong> <code>--use_ssh</code> bypasses the token-based <abbr title="Application Programming Interface, rules and definitions for software communication">API</abbr> flow that can be impacted by name/TLS/CSRF issues and uses the Proxmox-maintained SSH path to copy the corosync auth key and generate certificates.</p>
+<h4 id="62b-removere-add-a-stale-node">6.2b Remove/re-add a stale node<a class="headerlink" href="#62b-removere-add-a-stale-node" title="Permanent link">&para;</a></h4>
+<p>If a node was joined with the wrong <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> or failed mid-join, clean it up and rejoin:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># On the broken node (e.g., NUC02)</span>
+systemctl<span class="w"> </span>stop<span class="w"> </span>pve-cluster<span class="w"> </span>corosync
+killall<span class="w"> </span>pmxcfs<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>/etc/pve/corosync.conf
+rm<span class="w"> </span>-rf<span class="w"> </span>/etc/corosync/*<span class="w"> </span>/var/lib/corosync/*<span class="w"> </span>/var/lib/pve-cluster/config.db*
+systemctl<span class="w"> </span>start<span class="w"> </span>pve-cluster
+
+<span class="c1"># Re-add via SSH (forces overwrite of stale config)</span>
+pvecm<span class="w"> </span>add<span class="w"> </span><span class="m">172</span>.16.12.10<span class="w"> </span>--use_ssh<span class="w"> </span>--force
+</code></pre></div>
+<p>If the cluster itself lost quorum during cleanup, on the leader you can temporarily lower the expected votes to remove a dead node:
+<div class="highlight"><pre><span></span><code>pvecm<span class="w"> </span>expected<span class="w"> </span><span class="m">1</span>
+pvecm<span class="w"> </span>delnode<span class="w"> </span>&lt;NODENAME&gt;
+</code></pre></div></p>
+<h4 id="62c-fixing-wrong-ring0-ip-after-cluster-creation">6.2c Fixing wrong ring0 <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> after cluster creation<a class="headerlink" href="#62c-fixing-wrong-ring0-ip-after-cluster-creation" title="Permanent link">&para;</a></h4>
+<p>If the leader formed the cluster using the <strong>management <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr></strong> instead of the cluster <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr>:</p>
+<p>1) Fix <code>/etc/hosts</code> on the leader so the <strong>cluster <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> is first</strong> for the node’s canonical name (see 6.1c).
+2) Recreate the cluster cleanly on the leader:
+<div class="highlight"><pre><span></span><code>systemctl<span class="w"> </span>stop<span class="w"> </span>pve-cluster<span class="w"> </span>corosync
+pmxcfs<span class="w"> </span>-l<span class="w">               </span><span class="c1"># ensure it now resolves to the cluster IP</span>
+rm<span class="w"> </span>-f<span class="w"> </span>/etc/pve/corosync.conf
+killall<span class="w"> </span>pmxcfs<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+systemctl<span class="w"> </span>start<span class="w"> </span>pve-cluster
+pvecm<span class="w"> </span>create<span class="w"> </span>pve-cluster01
+</code></pre></div>
+3) Join the remaining nodes with:
+<div class="highlight"><pre><span></span><code>pvecm<span class="w"> </span>add<span class="w"> </span><span class="m">172</span>.16.12.10<span class="w"> </span>--use_ssh
+</code></pre></div>
+4) Validate:
+<div class="highlight"><pre><span></span><code>pvecm<span class="w"> </span>status
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;ring0_addr|name|cluster_name&#39;</span><span class="w"> </span>/etc/pve/corosync.conf
+</code></pre></div></p>
+<h3 id="63-configure-management-vlan-and-access-control-lists-acls-allow-jump-box-continuous-integration-ci-admin">6.3 Configure management <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> and Access Control Lists (ACLs) (allow Jump Box, Continuous Integration (CI), admin)<a class="headerlink" href="#63-configure-management-vlan-and-access-control-lists-acls-allow-jump-box-continuous-integration-ci-admin" title="Permanent link">&para;</a></h3>
+<p><strong><abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> IDs:</strong>
+- <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 15: Management
+- <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 12: Corosync/Cluster
+- <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 30: Storage
+- <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 10: Production workloads
+- <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 20: Lab
+- <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 40: Public Access
+- <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 5: Family
+- <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 200: <abbr title="Internet of Things, interconnected devices with network capabilities">IoT</abbr></p>
+<h4 id="validation_4">Validation<a class="headerlink" href="#validation_4" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Management <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> and Access Control Lists (ACLs) verified
+🏆 Achievement Unlocked: Secure management lanes!</li>
+</ul>
+<h3 id="64-connect-to-network-attached-storage-nas-via-network-file-system-nfs-and-internet-small-computer-systems-interface-iscsi">6.4 Connect to Network Attached Storage (<abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr>) via Network File System (<abbr title="Network File System, protocol for sharing files over a network">NFS</abbr>) and Internet Small Computer Systems Interface (iSCSI)<a class="headerlink" href="#64-connect-to-network-attached-storage-nas-via-network-file-system-nfs-and-internet-small-computer-systems-interface-iscsi" title="Permanent link">&para;</a></h3>
+<p>NAS01 provides <abbr title="Network File System, protocol for sharing files over a network">NFS</abbr> and iSCSI (primary datastore), while NAS02 provides <abbr title="Network File System, protocol for sharing files over a network">NFS</abbr> for media only. GPU01’s <abbr title="Non-Volatile Memory Express, protocol for fast SSDs">NVMe</abbr> is used as a temporary datastore until NAS01 rebuild is complete.</p>
+<h4 id="validation_5">Validation<a class="headerlink" href="#validation_5" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Network File System (<abbr title="Network File System, protocol for sharing files over a network">NFS</abbr>) mount verified</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Internet Small Computer Systems Interface (iSCSI) Logical Unit Number (<abbr title="Logical Unit Number, a block storage allocation presented by iSCSI">LUN</abbr>) attached
+🏆 Achievement Unlocked: Shared storage online!</li>
+</ul>
+<h3 id="64b-validate-nas-storage-exports">6.4b Validate <abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr> storage exports<a class="headerlink" href="#64b-validate-nas-storage-exports" title="Permanent link">&para;</a></h3>
+<p>Ensure NAS01 and NAS02 are correctly serving iSCSI and <abbr title="Network File System, protocol for sharing files over a network">NFS</abbr> before cluster integration.</p>
+<h4 id="steps_1">Steps<a class="headerlink" href="#steps_1" title="Permanent link">&para;</a></h4>
+<ol>
+<li>From GPU01:
+   <div class="highlight"><pre><span></span><code>nc<span class="w"> </span>-zv<span class="w"> </span><span class="m">172</span>.16.30.5<span class="w"> </span><span class="m">3260</span><span class="w">     </span><span class="c1"># iSCSI target on NAS01</span>
+showmount<span class="w"> </span>-e<span class="w"> </span><span class="m">172</span>.16.30.5<span class="w">   </span><span class="c1"># NFS exports on NAS01</span>
+showmount<span class="w"> </span>-e<span class="w"> </span><span class="m">172</span>.16.30.4<span class="w">   </span><span class="c1"># NFS exports on NAS02</span>
+</code></pre></div></li>
+<li>Confirm expected exports:</li>
+<li>NAS01: <code>vm-store</code>, <code>pbs-ds</code>, optional templates path</li>
+<li>NAS02: <code>/Media</code> (RAID5 media share)</li>
+<li>Document export names and paths for Ansible/Terraform use.</li>
+</ol>
+<h4 id="validation_6">Validation<a class="headerlink" href="#validation_6" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> NAS01 iSCSI target responds</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> NAS01 <abbr title="Network File System, protocol for sharing files over a network">NFS</abbr> exports visible</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> NAS02 <abbr title="Network File System, protocol for sharing files over a network">NFS</abbr> export <code>/Media</code> visible
+🏆 Achievement Unlocked: Storage exports online!</li>
+</ul>
+<h3 id="65-set-up-nightly-snapshots-to-proxmox-backup-server-pbsnas-and-offsite-optional">6.5 Set up nightly snapshots to Proxmox Backup Server (<abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr>)/<abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr> (and offsite optional)<a class="headerlink" href="#65-set-up-nightly-snapshots-to-proxmox-backup-server-pbsnas-and-offsite-optional" title="Permanent link">&para;</a></h3>
+<p><strong><abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> plan:</strong> Run <abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> as a <strong><abbr title="Virtual Machine, emulated computer instance">VM</abbr> on GPU01</strong>. Primary datastore on <strong>NAS01 via iSCSI</strong>. Network on <strong><abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 15</strong>. Retention: <strong>daily 7, weekly 4, monthly 6</strong>. Enable <strong>prune</strong> and <strong>verify</strong>.</p>
+<p><strong>Implementation steps</strong>
+1. <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr>: reserve <code>pbs01.&lt;your-domain&gt;</code> on <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> 15. <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> example: <code>172.16.15.50</code>.
+2. NAS01 iSCSI: create target + <abbr title="Logical Unit Number, a block storage allocation presented by iSCSI">LUN</abbr> for <code>pbs-ds</code> on the storage pool you dedicate to backups.
+3. Proxmox (GPU01): create <code>pbs01</code> <abbr title="Virtual Machine, emulated computer instance">VM</abbr>, attach iSCSI <abbr title="Logical Unit Number, a block storage allocation presented by iSCSI">LUN</abbr> as a disk, format XFS or ext4 inside <abbr title="Virtual Machine, emulated computer instance">VM</abbr>.
+4. <abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> setup: add datastore <code>pbs-ds</code>, set retention <code>7/4/6</code>, schedule <strong>Verify</strong> weekly, <strong>Prune</strong> weekly.
+5. Proxmox jobs: create backup jobs for critical VMs/CTs to <code>pbs-ds</code>. Stagger schedules to avoid contention.
+6. Optional offsite: later add cloud sync or a secondary <abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr> mirror for ransomware resilience.</p>
+<p><strong><abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> hosting options</strong>
+| Option | Pros | Cons |
+|---|---|---|
+| <strong><abbr title="Virtual Machine, emulated computer instance">VM</abbr> on Proxmox, datastore on NAS01 (iSCSI)</strong> | Supported, simple upgrades, fast LAN | Consumes host <abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr>/<abbr title="Random Access Memory, volatile system memory">RAM</abbr>; depends on NAS01 |
+| <strong>Small dedicated box, datastore on NAS01</strong> | Isolates <abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> OS from hypervisors | Extra hardware; still one storage backend |
+| <strong>Docker on NAS01</strong> | No extra hardware | <strong>Unsupported</strong> by Proxmox; feature breakage risk on upgrades |</p>
+<h4 id="validation_7">Validation<a class="headerlink" href="#validation_7" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Backup snapshot completed
+🏆 Achievement Unlocked: Snapshots scheduled!</li>
+</ul>
+<h3 id="66-deploy-3-node-consul-vault-clusters-spread-across-nodes">6.6 Deploy 3-node Consul + Vault clusters spread across nodes<a class="headerlink" href="#66-deploy-3-node-consul-vault-clusters-spread-across-nodes" title="Permanent link">&para;</a></h3>
+<h4 id="validation_8">Validation<a class="headerlink" href="#validation_8" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Consul cluster booted</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Vault cluster sealed and reachable
+🏆 Achievement Unlocked: Service backbone deployed!</li>
+</ul>
+<h3 id="67-automation-skeletons-copypaste">6.7 Automation skeletons (copy/paste)<a class="headerlink" href="#67-automation-skeletons-copypaste" title="Permanent link">&para;</a></h3>
+<h4 id="ansible-cluster-storage-minimal-skeleton">Ansible (cluster + storage) — minimal skeleton<a class="headerlink" href="#ansible-cluster-storage-minimal-skeleton" title="Permanent link">&para;</a></h4>
+<p><code>inventories/hosts.yml</code>
+<div class="highlight"><pre><span></span><code><span class="nt">all</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;root@pam&quot;</span>
+<span class="w">    </span><span class="nt">api_token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;env&#39;,&#39;PVE_TOKEN_ID&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">api_token_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;env&#39;,&#39;PVE_TOKEN_SECRET&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">gpu01_mgmt_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.15.10&quot;</span>
+<span class="w">  </span><span class="nt">children</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pve</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">gpu01</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> ansible_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.15.10&quot;</span><span class="p p-Indicator">,</span><span class="nt"> corosync_link0_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.12.10&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">        </span><span class="nt">nuc01</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> ansible_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.15.11&quot;</span><span class="p p-Indicator">,</span><span class="nt"> corosync_link0_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.12.11&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">        </span><span class="nt">nuc02</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> ansible_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.15.12&quot;</span><span class="p p-Indicator">,</span><span class="nt"> corosync_link0_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.12.12&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div></p>
+<p><code>playbooks/10_cluster_bootstrap.yml</code>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpu01</span>
+<span class="w">  </span><span class="nt">gather_facts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create cluster on GPU01</span>
+<span class="w">      </span><span class="nt">community.proxmox.proxmox_cluster</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">        </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gpu01_mgmt_ip</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_user</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_secret</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">cluster_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pve-cluster01&quot;</span>
+<span class="w">        </span><span class="nt">link0</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">hostvars[&#39;gpu01&#39;].corosync_link0_ip</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="w">  </span><span class="c1"># VLAN 12</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nuc01,nuc02</span>
+<span class="w">  </span><span class="nt">gather_facts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Join cluster</span>
+<span class="w">      </span><span class="nt">community.proxmox.proxmox_cluster</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">        </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_user</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_secret</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">master_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">gpu01_mgmt_ip</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">link0</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">hostvars[inventory_hostname].corosync_link0_ip</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="w">  </span><span class="c1"># VLAN 12</span>
+<span class="w">        </span><span class="c1"># fingerprint: &quot;&lt;paste GPU01 API TLS fingerprint&gt;&quot;</span>
+</code></pre></div></p>
+<p><code>playbooks/20_storage.yml</code>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpu01</span>
+<span class="w">  </span><span class="nt">gather_facts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add NAS01 iSCSI portal</span>
+<span class="w">      </span><span class="nt">community.proxmox.proxmox_storage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">hostvars[&#39;gpu01&#39;].ansible_host</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_user</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_secret</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nas01-iscsi&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;iscsi&quot;</span>
+<span class="w">        </span><span class="nt">portal</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.30.5&quot;</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;iqn.2000-01.com.synology:nas01.pve&quot;</span><span class="w">   </span><span class="c1"># placeholder</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;images,rootdir&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add LVM-Thin on iSCSI LUN (placeholder values)</span>
+<span class="w">      </span><span class="nt">community.proxmox.proxmox_storage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">hostvars[&#39;gpu01&#39;].ansible_host</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_user</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_secret</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vmstore&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;lvmthin&quot;</span>
+<span class="w">        </span><span class="nt">vgname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vg_vmstore&quot;</span>
+<span class="w">        </span><span class="nt">thinpool</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;thin_vmstore&quot;</span>
+<span class="w">        </span><span class="nt">base</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/dev/mapper/&lt;your-iscsi-lun-mapper&gt;&quot;</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;images,rootdir&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add NFS (templates) from NAS01</span>
+<span class="w">      </span><span class="nt">community.proxmox.proxmox_storage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">hostvars[&#39;gpu01&#39;].ansible_host</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_user</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_secret</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nas01-nfs-templates&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nfs&quot;</span>
+<span class="w">        </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.30.5&quot;</span>
+<span class="w">        </span><span class="nt">export</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/volumeX/pve-templates&quot;</span><span class="w">   </span><span class="c1"># placeholder path</span>
+<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vers=4.1&quot;</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;iso,vztmpl,snippets&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add NFS (media) from NAS02</span>
+<span class="w">      </span><span class="nt">community.proxmox.proxmox_storage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">hostvars[&#39;gpu01&#39;].ansible_host</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_user</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">api_token_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">api_token_secret</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nas02-media&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nfs&quot;</span>
+<span class="w">        </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;172.16.30.4&quot;</span>
+<span class="w">        </span><span class="nt">export</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/mnt/media&quot;</span><span class="w">   </span><span class="c1"># placeholder path</span>
+<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vers=4.1&quot;</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;backup&quot;</span>
+</code></pre></div></p>
+<p><code>playbooks/15_enable_ha_watchdog.yml</code>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pve</span>
+<span class="w">  </span><span class="nt">gather_facts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check for hardware watchdog device</span>
+<span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash -lc &quot;ls -1 /dev/watchdog* 2&gt;/dev/null || true&quot;</span>
+<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wd_devices</span>
+<span class="w">      </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Decide if softdog is required</span>
+<span class="w">      </span><span class="nt">set_fact</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">need_softdog</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">wd_devices.stdout_lines</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">length</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Load softdog when no hardware watchdog is present</span>
+<span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">need_softdog</span>
+<span class="w">      </span><span class="nt">modprobe</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">softdog</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Persist softdog module across reboots</span>
+<span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">need_softdog</span>
+<span class="w">      </span><span class="nt">copy</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/modules-load.d/watchdog.conf</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;softdog\n&quot;</span>
+<span class="w">        </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span>
+<span class="w">        </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span>
+<span class="w">        </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0644&#39;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable and start Proxmox HA services</span>
+<span class="w">      </span><span class="nt">systemd</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">      </span><span class="nt">loop</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pve-ha-lrm</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pve-ha-crm</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Assert HA services are healthy</span>
+<span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">systemctl is-active {{ item }}</span>
+<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ha_status</span>
+<span class="w">      </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ha_status.rc != 0</span>
+<span class="w">      </span><span class="nt">loop</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pve-ha-lrm</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pve-ha-crm</span>
+</code></pre></div></p>
+<h4 id="terraform-bpgproxmox-minimal-skeleton">Terraform (bpg/proxmox) — minimal skeleton<a class="headerlink" href="#terraform-bpgproxmox-minimal-skeleton" title="Permanent link">&para;</a></h4>
+<p><code>terraform/providers.tf</code>
+<div class="highlight"><pre><span></span><code><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">proxmox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;bpg/proxmox&quot;, version = &quot;~&gt; 0.49&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;proxmox&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://172.16.15.10:8006/&quot;</span>
+<span class="w">  </span><span class="na">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;root@pam&quot;</span>
+<span class="w">  </span><span class="na">api_token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">var.api_token</span>
+<span class="w">  </span><span class="na">insecure</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+<span class="p">}</span>
+<span class="kr">variable</span><span class="w"> </span><span class="nv">&quot;api_token&quot;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div></p>
+<p><code>terraform/pbs01.tf</code> (upload <abbr title="Proxmox Backup Server, backup solution integrated with Proxmox">PBS</abbr> ISO to a datastore first)
+<div class="highlight"><pre><span></span><code><span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;proxmox_virtual_environment_vm&quot;</span><span class="w"> </span><span class="nv">&quot;pbs01&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">name</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;pbs01&quot;</span>
+<span class="w">  </span><span class="na">node_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;GPU01&quot;</span>
+<span class="w">  </span><span class="na">tags</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pbs&quot;</span><span class="p">]</span>
+<span class="w">  </span><span class="nb">cpu</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">cores</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nb">memory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">dedicated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4096</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nb">disk</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">datastore_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;vmstore&quot;</span><span class="c1">   # local or iSCSI-backed LVM-thin</span>
+<span class="w">    </span><span class="na">interface</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;scsi0&quot;</span>
+<span class="w">    </span><span class="na">size</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="m">16</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nb">cdrom</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">file_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;local:iso/proxmox-backup-server_*.iso&quot;</span><span class="c1">  # upload ISO</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nb">network_device</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">bridge</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;vmbr0&quot;</span>
+<span class="w">    </span><span class="na">vlan_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nb">initialization</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">user_account</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="nb">ip_config</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nb">ipv4</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;172.16.15.50/24&quot;, gateway = &quot;172.16.15.1&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nb">dns</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">servers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;172.16.15.1&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h3 id="68-ha-fencing-and-watchdog-validation">6.8 <abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> Fencing and Watchdog Validation<a class="headerlink" href="#68-ha-fencing-and-watchdog-validation" title="Permanent link">&para;</a></h3>
+<p>Proxmox <abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> relies on a watchdog device. If no hardware watchdog exists, enable the kernel <strong>softdog</strong> module.</p>
+<h4 id="steps_2">Steps<a class="headerlink" href="#steps_2" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Detect watchdog (on each node)</strong>
+   <div class="highlight"><pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>/dev/watchdog*<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>watchdog<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>watchdog<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+</code></pre></div></li>
+<li><strong>Enable softdog if no hardware watchdog is present</strong>
+   <div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>modprobe<span class="w"> </span>softdog
+<span class="c1"># make persistent across reboots</span>
+<span class="nb">echo</span><span class="w"> </span>softdog<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modules-load.d/watchdog.conf
+</code></pre></div></li>
+<li><strong>Start Proxmox <abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> services</strong>
+   <div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>pve-ha-lrm<span class="w"> </span>pve-ha-crm
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>pve-ha-lrm<span class="w"> </span>pve-ha-crm<span class="w"> </span>--no-pager
+</code></pre></div><blockquote>
+<p>If <code>pve-ha-lrm</code>/<code>pve-ha-crm</code> previously logged “unable to write lrm status file” while the cluster filesystem was down, those errors should clear once quorum and <code>/etc/pve</code> are healthy again.</p>
+</blockquote>
+</li>
+<li><strong>Confirm watchdog is active in <abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> logs</strong>
+   <div class="highlight"><pre><span></span><code>journalctl<span class="w"> </span>-u<span class="w"> </span>pve-ha-lrm<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;5 min ago&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>watchdog<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+</code></pre></div></li>
+<li><strong>Optional: quick <abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> group smoke test</strong>
+   <div class="highlight"><pre><span></span><code><span class="c1"># create an HA group preferring GPU01, then NUC01, then NUC02</span>
+ha-manager<span class="w"> </span>group<span class="w"> </span>add<span class="w"> </span>core<span class="w"> </span><span class="nv">pref</span><span class="o">=</span>GPU01,Nuc01,Nuc02
+<span class="c1"># add a non-critical test VM to HA (replace 101 with a test VMID)</span>
+ha-manager<span class="w"> </span>add<span class="w"> </span>vm:101<span class="w"> </span>--group<span class="w"> </span>core<span class="w"> </span>--state<span class="w"> </span>started
+ha-manager<span class="w"> </span>status
+</code></pre></div>
+   <em>Note:</em> Do not simulate failures yet. This is a non-disruptive verification only.</li>
+</ol>
+<p><strong>Automation:</strong> You can run <code>ansible-playbook playbooks/15_enable_ha_watchdog.yml</code> to perform steps 2–3 on all nodes.</p>
+<h4 id="validation_9">Validation<a class="headerlink" href="#validation_9" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>/dev/watchdog</code> exists on all nodes</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>softdog</code> loaded where no hardware watchdog is available</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>pve-ha-lrm</code> and <code>pve-ha-crm</code> are active</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>ha-manager status</code> returns without errors</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Ansible playbook <code>playbooks/15_enable_ha_watchdog.yml</code> executed successfully on all nodes</li>
+</ul>
+<h4 id="fencing-approaches-quick-comparison">Fencing approaches — quick comparison<a class="headerlink" href="#fencing-approaches-quick-comparison" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hardware watchdog</strong> (board/<abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr> vendor)</td>
+<td>Fast, reliable fencing; minimal <abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr></td>
+<td>May not exist on NUCs; driver quirks</td>
+</tr>
+<tr>
+<td><strong>softdog kernel module</strong></td>
+<td>Universal, simple to enable</td>
+<td>Software-based; lower assurance than hardware</td>
+</tr>
+<tr>
+<td><strong>No watchdog (not recommended)</strong></td>
+<td>Zero setup</td>
+<td><abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> cannot fence, risk of split-brain; <abbr title="High Availability, system design to ensure uptime and redundancy">HA</abbr> disabled</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Quick Overview</p>
+<p><strong>What:</strong> Shared abbreviations and hover tooltips for the campaign.
+<strong>Why:</strong> Ensures acronyms and jargon stay consistent across all docs.
+<strong>Time:</strong> Ongoing; update whenever a new term is introduced.
+<strong>XP:</strong> +5 per new acronym (like Whose Line, the points are made up but the fun is real).</p>
+</div>
+<!-- Shared abbreviations for hover tooltips across the site -->
+<p>Think of this file as your universal translator—every acronym here powers hover definitions site-wide.</p>
+<blockquote>
+<p>🎉 Abbreviations updated! You’ve earned +5 XP for each new term (points don’t matter, but consistency does).</p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../05-NAS-Setup/" class="md-footer__link md-footer__link--prev" aria-label="Previous: NAS Setup">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                NAS Setup
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../ai-context/" class="md-footer__link md-footer__link--next" aria-label="Next: AI Context">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                AI Context
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/MichaelHeaton" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "content.code.copy", "toc.integrate", "navigation.sections", "navigation.footer"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

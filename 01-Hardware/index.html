@@ -1,0 +1,1148 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://michaelheaton.github.io/homelab-infra/01-Hardware/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../02-Workstation-Setup/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Hardware - Homelab Infra</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hardware" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Homelab Infra" class="md-header__button md-logo" aria-label="Homelab Infra" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Homelab Infra
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Hardware
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/MichaelHeaton/homelab-infra" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MichaelHeaton/homelab-infra
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Homelab Infra" class="md-nav__button md-logo" aria-label="Homelab Infra" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    Homelab Infra
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/MichaelHeaton/homelab-infra" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MichaelHeaton/homelab-infra
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 17H7V7h10m4 4V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7c-1.11 0-2 .89-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2m-6 2h-2v-2h2m2-2H9v6h6z"/></svg>
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 17H7V7h10m4 4V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7c-1.11 0-2 .89-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2m-6 2h-2v-2h2m2-2H9v6h6z"/></svg>
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#entry-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entry Checks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exit Criteria
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-Workstation-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v10H4m16 2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4c-1.11 0-2 .89-2 2v10a2 2 0 0 0 2 2H0v2h24v-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    Workstation Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-Cloud-Accounts-and-Foundations/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
+  
+  <span class="md-ellipsis">
+    Cloud Accounts & Foundations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-Network-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h1v2H2v2h4v2H5c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2H8v-2h8v2h-1c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2h-1v-2h4v-2h-9V9h1c1.11 0 2-.89 2-2V4c0-1.11-.89-2-2-2zm0 2h4v3h-4zM5 17h4v3H5zm10 0h4v3h-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    Network Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-NAS-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m6 2a6 6 0 0 0-6 6c0 3.31 2.69 6 6.1 6l-.88-2.23a1.01 1.01 0 0 1 .37-1.37l.86-.5a1.01 1.01 0 0 1 1.37.37l1.92 2.42A5.98 5.98 0 0 0 18 10a6 6 0 0 0-6-6m0 5a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-5 9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m5.09-4.73 2.49 6.31 2.59-1.5-4.22-5.31z"/></svg>
+  
+  <span class="md-ellipsis">
+    NAS Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-Proxmox-Cluster-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1M9 5h1V3H9zm0 8h1v-2H9zm0 8h1v-2H9zM5 3v2h2V3zm0 8v2h2v-2zm0 8v2h2v-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    Proxmox Cluster Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-context/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 14h-1c0-3.87-3.13-7-7-7h-1V5.73A2 2 0 1 0 10 4c0 .74.4 1.39 1 1.73V7h-1c-3.87 0-7 3.13-7 7H2c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h1v1a2 2 0 0 0 2 2h14c1.11 0 2-.89 2-2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1M9.79 16.5C9.4 15.62 8.53 15 7.5 15s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1m9 0c-.39-.88-1.29-1.5-2.29-1.5s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1"/></svg>
+  
+  <span class="md-ellipsis">
+    AI Context
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 14h-1c0-3.87-3.13-7-7-7h-1V5.73A2 2 0 1 0 10 4c0 .74.4 1.39 1 1.73V7h-1c-3.87 0-7 3.13-7 7H2c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h1v1a2 2 0 0 0 2 2h14c1.11 0 2-.89 2-2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1M9.79 16.5C9.4 15.62 8.53 15 7.5 15s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1m9 0c-.39-.88-1.29-1.5-2.29-1.5s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1"/></svg>
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Runbooks
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Runbooks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runbooks/resolve_conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Resolve Conflicts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runbooks/vault_bootstrap_runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Vault Bootstrap Runbook
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="hardware">Hardware<a class="headerlink" href="#hardware" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Quick Overview</p>
+<p><strong>What:</strong> Choose and prepare the physical gear for your homelab.
+<strong>Why:</strong> Hardware is the bedrock — without it, nothing else works.
+<strong>Time:</strong> 30–60 minutes to review, longer if buying hardware.
+<strong>XP:</strong> Up to 70 points (like Whose Line, the points are made up but the fun is real).</p>
+</div>
+<h2 id="entry-checks">Entry Checks<a class="headerlink" href="#entry-checks" title="Permanent link">&para;</a></h2>
+<p>Before proceeding, ensure you have:</p>
+<ul>
+<li>Administrative access to your network and hardware.</li>
+<li>A planned budget for purchasing or upgrading hardware.</li>
+<li>Adequate physical space and power availability for your equipment.</li>
+<li>Basic understanding of virtualization and networking concepts.</li>
+</ul>
+<h2 id="outcomes">Outcomes<a class="headerlink" href="#outcomes" title="Permanent link">&para;</a></h2>
+<p>By the end of this chapter, you will be able to:</p>
+<ul>
+<li>Determine the hardware requirements for your workstation.</li>
+<li>Understand the specifications needed for Proxmox Nodes.</li>
+<li>Identify suitable <abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr>/Storage solutions for reliability and performance.</li>
+<li>Plan and configure networking hardware and <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> segmentation.</li>
+<li>Understand domain name usage and SSL certificate requirements.</li>
+<li>Recognize the importance of a public <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> or dynamic <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr> service.</li>
+<li>Select appropriate power management solutions for your setup.</li>
+</ul>
+<p>Your homelab starts with hardware. From workstation to power protection, this chapter helps you choose and prepare the foundation for everything else.</p>
+<h3 id="11-workstation-requirements">1.1 Workstation Requirements<a class="headerlink" href="#11-workstation-requirements" title="Permanent link">&para;</a></h3>
+<p>A workstation acts as your primary interface for developing, configuring, and managing your homelab. This lab helps you review the minimum and recommended workstation hardware specifications.</p>
+<h3 id="workstation-hardware-requirements">Workstation Hardware Requirements<a class="headerlink" href="#workstation-hardware-requirements" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Minimum</th>
+<th>Recommended</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><abbr title="Random Access Memory, volatile system memory">RAM</abbr></td>
+<td>8 <abbr title="Gigabyte, unit of data storage or memory capacity">GB</abbr> <abbr title="Random Access Memory, volatile system memory">RAM</abbr></td>
+<td>16+ <abbr title="Gigabyte, unit of data storage or memory capacity">GB</abbr> <abbr title="Random Access Memory, volatile system memory">RAM</abbr></td>
+</tr>
+<tr>
+<td><abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr></td>
+<td>Dual-core <abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr></td>
+<td>Quad-core or higher <abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr></td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>128 <abbr title="Gigabyte, unit of data storage or memory capacity">GB</abbr> <abbr title="Solid State Drive, fast storage device">SSD</abbr></td>
+<td>256+ <abbr title="Gigabyte, unit of data storage or memory capacity">GB</abbr> <abbr title="Solid State Drive, fast storage device">SSD</abbr>/<abbr title="Non-Volatile Memory Express, protocol for fast SSDs">NVMe</abbr></td>
+</tr>
+</tbody>
+</table>
+<p>Operating System Support: Windows, macOS, Linux
+Package managers such as Homebrew (macOS package manager) and Chocolatey (Windows package manager) simplify software installation.</p>
+<h4 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have identified a workstation that meets or exceeds the minimum hardware requirements.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I understand the recommended specifications for better performance.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> My workstation's operating system supports the necessary software tools.<blockquote>
+<p>🏆 Achievement Unlocked: Your workstation meets the challenge!</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="12-proxmox-nodes-specifications">1.2 Proxmox Nodes Specifications<a class="headerlink" href="#12-proxmox-nodes-specifications" title="Permanent link">&para;</a></h3>
+<p>Proxmox Nodes provide the compute power and virtualization capabilities to run multiple workloads. This lab reviews the hardware needed to build effective Proxmox Nodes.</p>
+<h3 id="proxmox-node-hardware-requirements">Proxmox Node Hardware Requirements<a class="headerlink" href="#proxmox-node-hardware-requirements" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Minimum</th>
+<th>Recommended</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><abbr title="Random Access Memory, volatile system memory">RAM</abbr></td>
+<td>8 <abbr title="Gigabyte, unit of data storage or memory capacity">GB</abbr> <abbr title="Random Access Memory, volatile system memory">RAM</abbr></td>
+<td>32+ <abbr title="Gigabyte, unit of data storage or memory capacity">GB</abbr> <abbr title="Random Access Memory, volatile system memory">RAM</abbr></td>
+</tr>
+<tr>
+<td><abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr></td>
+<td>Dual-core <abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr></td>
+<td>Quad-core or higher <abbr title="Central Processing Unit, the main processor of a computer">CPU</abbr></td>
+</tr>
+<tr>
+<td>Storage Type</td>
+<td>Basic storage</td>
+<td><abbr title="Solid State Drive, fast storage device">SSD</abbr>/<abbr title="Non-Volatile Memory Express, protocol for fast SSDs">NVMe</abbr> storage (prefer enterprise-grade)</td>
+</tr>
+<tr>
+<td>Storage Size</td>
+<td>128 <abbr title="Gigabyte, unit of data storage or memory capacity">GB</abbr>+ disk size</td>
+<td>500 <abbr title="Gigabyte, unit of data storage or memory capacity">GB</abbr>+ disk size</td>
+</tr>
+<tr>
+<td>Networking</td>
+<td>1 <abbr title="Gigabit Ethernet, network standard for 1 gigabit per second speeds">GbE</abbr> <abbr title="Network Interface Card, hardware for network connectivity">NIC</abbr></td>
+<td>10 <abbr title="Gigabit Ethernet, network standard for 1 gigabit per second speeds">GbE</abbr> or multiple bonded NICs</td>
+</tr>
+<tr>
+<td>Network Interface Cards (NICs)</td>
+<td>1 <abbr title="Network Interface Card, hardware for network connectivity">NIC</abbr></td>
+<td>Multiple NICs</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Optional Upgrades:</strong></p>
+<ul>
+<li>Increase <abbr title="Network Interface Card, hardware for network connectivity">NIC</abbr> count for better network segmentation and redundancy.</li>
+<li>Add GPUs for hardware acceleration and <abbr title="Graphics Processing Unit, processor for graphics and parallel workloads">GPU</abbr> passthrough.</li>
+</ul>
+<h4 id="validation_1">Validation<a class="headerlink" href="#validation_1" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have reviewed the minimum and recommended hardware for Proxmox Nodes.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have identified or planned for nodes that meet these specifications.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I understand optional upgrades and their benefits.<blockquote>
+<p>🏆 Achievement Unlocked: Proxmox nodes powered up!</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="13-nasstorage-solutions">1.3 <abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr>/Storage Solutions<a class="headerlink" href="#13-nasstorage-solutions" title="Permanent link">&para;</a></h3>
+<p>Reliable storage is essential for data protection, backups, and fast file access. This lab helps you evaluate <abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr> and Storage options suitable for your homelab.</p>
+<h3 id="nasstorage-hardware-requirements"><abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr>/Storage Hardware Requirements<a class="headerlink" href="#nasstorage-hardware-requirements" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Minimum</th>
+<th>Recommended</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocol Support</td>
+<td><abbr title="Network File System, protocol for sharing files over a network">NFS</abbr> (Network File System) or <abbr title="Server Message Block, protocol for sharing files, printers, and serial ports over a network">SMB</abbr> (Server Message Block) support</td>
+<td><abbr title="Network File System, protocol for sharing files over a network">NFS</abbr> and iSCSI support</td>
+</tr>
+<tr>
+<td>Device</td>
+<td>Basic <abbr title="Network File System, protocol for sharing files over a network">NFS</abbr>-capable device</td>
+<td><abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr> with multiple drive bays</td>
+</tr>
+<tr>
+<td>Network Interface</td>
+<td>1 <abbr title="Gigabit Ethernet, network standard for 1 gigabit per second speeds">GbE</abbr> network interface</td>
+<td>10 <abbr title="Gigabit Ethernet, network standard for 1 gigabit per second speeds">GbE</abbr> networking</td>
+</tr>
+<tr>
+<td><abbr title="Redundant Array of Independent Disks, storage virtualization for redundancy/performance">RAID</abbr> Support</td>
+<td>Optional</td>
+<td>Required (<abbr title="Redundant Array of Independent Disks, storage virtualization for redundancy/performance">RAID</abbr> 1/5/6/10, etc.)</td>
+</tr>
+<tr>
+<td><abbr title="Network Interface Card, hardware for network connectivity">NIC</abbr> Count and Speed</td>
+<td>1 x 1 <abbr title="Gigabit Ethernet, network standard for 1 gigabit per second speeds">GbE</abbr></td>
+<td>2+ x 1/10 <abbr title="Gigabit Ethernet, network standard for 1 gigabit per second speeds">GbE</abbr></td>
+</tr>
+<tr>
+<td>Expansion Options</td>
+<td>Not required</td>
+<td>Support for expansion units or JBOD</td>
+</tr>
+</tbody>
+</table>
+<h4 id="validation_2">Validation<a class="headerlink" href="#validation_2" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have reviewed the <abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr>/Storage protocols and device options.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have identified storage solutions that meet my data reliability and performance needs.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I understand the importance of <abbr title="Redundant Array of Independent Disks, storage virtualization for redundancy/performance">RAID</abbr> and network interfaces for redundancy and throughput.<blockquote>
+<p>🏆 Achievement Unlocked: Storage fortress secured!</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="14-networking-hardware-and-vlans">1.4 Networking Hardware and VLANs<a class="headerlink" href="#14-networking-hardware-and-vlans" title="Permanent link">&para;</a></h3>
+<p>Networking hardware enables segmentation, security, and performance optimization. This lab covers the selection of switches, <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> configuration, and network protocols.</p>
+<h3 id="vlan-example-table"><abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> Example Table<a class="headerlink" href="#vlan-example-table" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th><abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> ID</th>
+<th>Name</th>
+<th>Purpose</th>
+<th>Minimum Devices</th>
+<th>Recommended Devices</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>Management</td>
+<td>Network device management</td>
+<td>Optional</td>
+<td>Separate <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> for management</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Workstations</td>
+<td>User devices</td>
+<td>Optional</td>
+<td>Separate <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> for workstations</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Servers</td>
+<td>Homelab servers</td>
+<td>Optional</td>
+<td>Separate <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> for servers</td>
+</tr>
+<tr>
+<td>40</td>
+<td><abbr title="Internet of Things, interconnected devices with network capabilities">IoT</abbr></td>
+<td>Internet of Things devices</td>
+<td>Optional</td>
+<td>Isolated <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> for <abbr title="Internet of Things, interconnected devices with network capabilities">IoT</abbr></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Additional Notes:</strong></p>
+<ul>
+<li>Managed switches from UniFi, Cisco, or Netgear are recommended.</li>
+<li>Software options such as UniFi (default in this lab), pfSense, or OPNsense can handle routing and firewall duties.</li>
+<li>Use <abbr title="Standard connector for Ethernet networking">RJ45</abbr> (Ethernet connector) with Cat6 or better for copper; <abbr title="Small Form-factor Pluggable, transceiver for network modules">SFP</abbr>/<abbr title="Small Form-factor Pluggable, transceiver for network modules">SFP</abbr>+ modules and fiber for higher speeds or longer distances.</li>
+<li>Port forwarding and firewall rules are essential for secure external access.</li>
+<li>Consider <abbr title="Power over Ethernet, delivers power and data over the same cable">PoE</abbr> (Power over Ethernet) capable switches if you plan to power APs or cameras.</li>
+</ul>
+<h4 id="validation_3">Validation<a class="headerlink" href="#validation_3" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have reviewed <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> segmentation best practices.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have identified networking hardware that supports my <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> and performance requirements.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I understand how to configure port forwarding and firewall rules.<blockquote>
+<p>🏆 Achievement Unlocked: Network pathways established!</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="15-domain-names-and-ssl-certificates">1.5 Domain Names and SSL Certificates<a class="headerlink" href="#15-domain-names-and-ssl-certificates" title="Permanent link">&para;</a></h3>
+<p>Domain names allow external and internal access to homelab services. This lab reviews public and private domain usage and SSL (Secure Sockets Layer) certificate considerations.</p>
+<h3 id="key-points">Key Points<a class="headerlink" href="#key-points" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Public domain names require valid SSL certificates (e.g., via Let's Encrypt or Cloudflare <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr>-01).</li>
+<li>Private domains often use self-signed certificates or internal certificate authorities (CAs), requiring client configuration.</li>
+<li>Choose domain types based on access scope and security needs.</li>
+<li>SSL/TLS certificates should be automated where possible using <abbr title="Automated Certificate Management Environment, protocol for automated certificate issuance">ACME</abbr> (Automated Certificate Management Environment) clients.</li>
+</ul>
+<h4 id="validation_4">Validation<a class="headerlink" href="#validation_4" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I understand the difference between public and private domain names.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have planned for SSL certificate acquisition or management.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I know how to configure certificates for secure connections.<blockquote>
+<p>🏆 Achievement Unlocked: Domain identity claimed!</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="16-public-ip-and-dynamic-dns">1.6 Public <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> and Dynamic <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr><a class="headerlink" href="#16-public-ip-and-dynamic-dns" title="Permanent link">&para;</a></h3>
+<p>Remote access to your homelab requires a static public <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> or dynamic <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr> service. This lab covers verifying your public <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> and assessing internet speed.</p>
+<h3 id="verification-commands">Verification Commands<a class="headerlink" href="#verification-commands" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-s<span class="w"> </span>ifconfig.me
+curl<span class="w"> </span>-s<span class="w"> </span>https://ipinfo.io
+</code></pre></div>
+<h3 id="speed-test-options">Speed Test Options<a class="headerlink" href="#speed-test-options" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>speedtest-cli
+<span class="c1"># or</span>
+curl<span class="w"> </span>-s<span class="w"> </span>https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py<span class="w"> </span><span class="p">|</span><span class="w"> </span>python<span class="w"> </span>-
+</code></pre></div>
+<h3 id="additional-notes">Additional Notes<a class="headerlink" href="#additional-notes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>ISPs often provide asymmetric connections; upload speed is critical for hosting.</li>
+<li>Dynamic <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr> services like DuckDNS, No-<abbr title="Internet Protocol, addressing system for networked devices">IP</abbr>, or Cloudflare map changing IPs to fixed domain names.</li>
+<li>Consider <abbr title="Internet Protocol version 6, next-generation internet addressing system">IPv6</abbr> support for future-proofing and broader compatibility.</li>
+<li>For homelabs behind <abbr title="Carrier-Grade Network Address Translation, ISP technique to share IPv4 addresses">CGNAT</abbr>, a <abbr title="Virtual Private Network, secure tunnel for remote access">VPN</abbr> or tunneling service may be required for external access.</li>
+</ul>
+<h4 id="validation_5">Validation<a class="headerlink" href="#validation_5" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have verified my public <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> address or set up dynamic <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have tested my internet upload and download speeds.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I understand the impact of internet speed on hosting services.<blockquote>
+<p>🏆 Achievement Unlocked: Public presence secured!</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="17-power-management-solutions">1.7 Power Management Solutions<a class="headerlink" href="#17-power-management-solutions" title="Permanent link">&para;</a></h3>
+<p>Power management protects your homelab equipment and ensures uptime. This lab reviews power strip, surge protector, and <abbr title="Uninterruptible Power Supply, device providing backup power">UPS</abbr> options.</p>
+<h3 id="power-management-options">Power Management Options<a class="headerlink" href="#power-management-options" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Power Strip:</strong> Multiple outlets, no surge or outage protection.</li>
+<li><strong>Surge Protector:</strong> Protects against voltage spikes, no backup power.</li>
+<li><strong>Uninterruptible Power Supply (<abbr title="Uninterruptible Power Supply, device providing backup power">UPS</abbr>):</strong> Battery backup and surge protection.</li>
+<li><strong>Smart PDU:</strong> Network-manageable power distribution with per-outlet control.</li>
+</ul>
+<h3 id="ups-sizing-and-buying-guides"><abbr title="Uninterruptible Power Supply, device providing backup power">UPS</abbr> Sizing and Buying Guides<a class="headerlink" href="#ups-sizing-and-buying-guides" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://www.apc.com/us/en/faqs/FA158499/">How to Size a <abbr title="Uninterruptible Power Supply, device providing backup power">UPS</abbr></a></li>
+<li><a href="https://www.tripplite.com/ups-buying-guide">Choosing the Right <abbr title="Uninterruptible Power Supply, device providing backup power">UPS</abbr></a></li>
+<li><a href="https://www.tomshardware.com/reviews/best-ups-uninterruptible-power-supply,6070.html"><abbr title="Uninterruptible Power Supply, device providing backup power">UPS</abbr> Buying Guide - Tom's Hardware</a></li>
+</ul>
+<h4 id="validation_6">Validation<a class="headerlink" href="#validation_6" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have selected appropriate power protection for my homelab.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I understand the benefits of <abbr title="Uninterruptible Power Supply, device providing backup power">UPS</abbr> units for uptime and data protection.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have budgeted for power management solutions.<blockquote>
+<p>🏆 Achievement Unlocked: Power shield activated!</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="exit-criteria">Exit Criteria<a class="headerlink" href="#exit-criteria" title="Permanent link">&para;</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have identified or acquired a workstation that meets minimum requirements.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have selected or planned Proxmox Nodes with adequate compute, memory, storage, and networking.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have chosen <abbr title="Network Attached Storage, dedicated storage appliance on network">NAS</abbr>/Storage hardware appropriate for reliability, redundancy, and performance needs.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have planned networking hardware and <abbr title="Virtual LAN, network segmentation for isolating devices">VLAN</abbr> segmentation.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I understand domain name and SSL certificate requirements.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have verified public <abbr title="Internet Protocol, addressing system for networked devices">IP</abbr> or dynamic <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr> setup.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I have selected power management solutions (<abbr title="Uninterruptible Power Supply, device providing backup power">UPS</abbr>, surge, or smart PDU) for equipment protection.</li>
+</ul>
+<blockquote>
+<p>🎉 Chapter Complete! You’ve earned up to 70 XP (like Whose Line, the points are made up but the fun is real). Onward to the next adventure!</p>
+</blockquote>
+<div class="admonition info">
+<p class="admonition-title">Quick Overview</p>
+<p><strong>What:</strong> Shared abbreviations and hover tooltips for the campaign.
+<strong>Why:</strong> Ensures acronyms and jargon stay consistent across all docs.
+<strong>Time:</strong> Ongoing; update whenever a new term is introduced.
+<strong>XP:</strong> +5 per new acronym (like Whose Line, the points are made up but the fun is real).</p>
+</div>
+<!-- Shared abbreviations for hover tooltips across the site -->
+<p>Think of this file as your universal translator—every acronym here powers hover definitions site-wide.</p>
+<blockquote>
+<p>🎉 Abbreviations updated! You’ve earned +5 XP for each new term (points don’t matter, but consistency does).</p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../02-Workstation-Setup/" class="md-footer__link md-footer__link--next" aria-label="Next: Workstation Setup">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Workstation Setup
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/MichaelHeaton" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "content.code.copy", "toc.integrate", "navigation.sections", "navigation.footer"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

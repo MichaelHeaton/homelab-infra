@@ -1,0 +1,1354 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://michaelheaton.github.io/homelab-infra/02-Workstation-Setup/">
+      
+      
+        <link rel="prev" href="../01-Hardware/">
+      
+      
+        <link rel="next" href="../03-Cloud-Accounts-and-Foundations/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Workstation Setup - Homelab Infra</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#workstation-setup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Homelab Infra" class="md-header__button md-logo" aria-label="Homelab Infra" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Homelab Infra
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Workstation Setup
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/MichaelHeaton/homelab-infra" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MichaelHeaton/homelab-infra
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Homelab Infra" class="md-nav__button md-logo" aria-label="Homelab Infra" data-md-component="logo">
+      
+  <img src="../assets/logo.svg" alt="logo">
+
+    </a>
+    Homelab Infra
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/MichaelHeaton/homelab-infra" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MichaelHeaton/homelab-infra
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-Hardware/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 17H7V7h10m4 4V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7c-1.11 0-2 .89-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2m-6 2h-2v-2h2m2-2H9v6h6z"/></svg>
+  
+  <span class="md-ellipsis">
+    Hardware
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v10H4m16 2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4c-1.11 0-2 .89-2 2v10a2 2 0 0 0 2 2H0v2h24v-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    Workstation Setup
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v10H4m16 2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4c-1.11 0-2 .89-2 2v10a2 2 0 0 0 2 2H0v2h24v-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    Workstation Setup
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#entry-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entry Checks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#labs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Labs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exit Criteria
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-Cloud-Accounts-and-Foundations/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
+  
+  <span class="md-ellipsis">
+    Cloud Accounts & Foundations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-Network-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h1v2H2v2h4v2H5c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2H8v-2h8v2h-1c-1.11 0-2 .89-2 2v3c0 1.11.89 2 2 2h4c1.11 0 2-.89 2-2v-3c0-1.11-.89-2-2-2h-1v-2h4v-2h-9V9h1c1.11 0 2-.89 2-2V4c0-1.11-.89-2-2-2zm0 2h4v3h-4zM5 17h4v3H5zm10 0h4v3h-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    Network Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-NAS-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m6 2a6 6 0 0 0-6 6c0 3.31 2.69 6 6.1 6l-.88-2.23a1.01 1.01 0 0 1 .37-1.37l.86-.5a1.01 1.01 0 0 1 1.37.37l1.92 2.42A5.98 5.98 0 0 0 18 10a6 6 0 0 0-6-6m0 5a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m-5 9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m5.09-4.73 2.49 6.31 2.59-1.5-4.22-5.31z"/></svg>
+  
+  <span class="md-ellipsis">
+    NAS Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-Proxmox-Cluster-Setup/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1M9 5h1V3H9zm0 8h1v-2H9zm0 8h1v-2H9zM5 3v2h2V3zm0 8v2h2v-2zm0 8v2h2v-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    Proxmox Cluster Setup
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-context/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 14h-1c0-3.87-3.13-7-7-7h-1V5.73A2 2 0 1 0 10 4c0 .74.4 1.39 1 1.73V7h-1c-3.87 0-7 3.13-7 7H2c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h1v1a2 2 0 0 0 2 2h14c1.11 0 2-.89 2-2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1M9.79 16.5C9.4 15.62 8.53 15 7.5 15s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1m9 0c-.39-.88-1.29-1.5-2.29-1.5s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1"/></svg>
+  
+  <span class="md-ellipsis">
+    AI Context
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 14h-1c0-3.87-3.13-7-7-7h-1V5.73A2 2 0 1 0 10 4c0 .74.4 1.39 1 1.73V7h-1c-3.87 0-7 3.13-7 7H2c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h1v1a2 2 0 0 0 2 2h14c1.11 0 2-.89 2-2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1M9.79 16.5C9.4 15.62 8.53 15 7.5 15s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1m9 0c-.39-.88-1.29-1.5-2.29-1.5s-1.9.62-2.29 1.5c-.13-.31-.21-.64-.21-1a2.5 2.5 0 0 1 5 0c0 .36-.08.69-.21 1"/></svg>
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Runbooks
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Runbooks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runbooks/resolve_conflicts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Resolve Conflicts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runbooks/vault_bootstrap_runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Vault Bootstrap Runbook
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="workstation-setup">Workstation Setup<a class="headerlink" href="#workstation-setup" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Quick Overview</p>
+<p><strong>What:</strong> Install the essential workstation tools for building and managing your homelab.
+<strong>Why:</strong> These tools are your toolbox—<abbr title="Distributed version control system for tracking changes in source code">Git</abbr>, Docker, Terraform, and more.
+<strong>Time:</strong> 30–90 minutes depending on installs.
+<strong>XP:</strong> Up to 70 points (like Whose Line, the points are made up but the fun is real).</p>
+</div>
+<h2 id="entry-checks">Entry Checks<a class="headerlink" href="#entry-checks" title="Permanent link">&para;</a></h2>
+<ul>
+<li>macOS or Windows with admin rights</li>
+<li><abbr title="Distributed version control system for tracking changes in source code">Git</abbr> and GitHub account</li>
+<li>Docker Desktop available</li>
+</ul>
+<h2 id="outcomes">Outcomes<a class="headerlink" href="#outcomes" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Install and configure <abbr title="Distributed version control system for tracking changes in source code">Git</abbr> and GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr></li>
+<li>Install Wrangler and validate Cloudflare login</li>
+<li>Install Docker Desktop and verify installation</li>
+<li>Install Terraform and validate setup</li>
+<li>(Optional) Install Ansible and validate setup on supported platforms</li>
+</ul>
+<p>With your hardware ready, it’s time to prepare your workstation. These tools are the core kit that will let you manage, automate, and interact with every part of your homelab journey.</p>
+<h3 id="preparing-package-managers">Preparing Package Managers<a class="headerlink" href="#preparing-package-managers" title="Permanent link">&para;</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">macOS</label><label for="__tabbed_1_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Homebrew (macOS package manager) (if not already installed):</p>
+<div class="highlight"><pre><span></span><code>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Chocolatey (Windows package manager) (if not already installed):</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Set-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="n">-Scope</span> <span class="k">Process</span> <span class="n">-Force</span><span class="p">;</span> <span class="p">`</span>
+<span class="no">[System.Net.ServicePointManager]</span><span class="p">::</span><span class="n">SecurityProtocol</span> <span class="p">=</span> <span class="no">[System.Net.ServicePointManager]</span><span class="p">::</span><span class="n">SecurityProtocol</span> <span class="o">-bor</span> <span class="n">3072</span><span class="p">;</span> <span class="p">`</span>
+<span class="nb">iex </span><span class="p">((</span><span class="nb">New-Object</span> <span class="n">System</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">WebClient</span><span class="p">).</span><span class="n">DownloadString</span><span class="p">(</span><span class="s1">&#39;https://community.chocolatey.org/install.ps1&#39;</span><span class="p">))</span>
+</code></pre></div>
+</li>
+<li>
+<p>Install curl (if not already available):</p>
+<div class="highlight"><pre><span></span><code><span class="n">choco</span> <span class="n">install</span> <span class="nb">curl</span>
+</code></pre></div>
+</li>
+<li>
+<p>Validate:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">curl </span><span class="p">-</span><span class="n">-version</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h2 id="labs">Labs<a class="headerlink" href="#labs" title="Permanent link">&para;</a></h2>
+<h3 id="21-git-and-github-cli">2.1 <abbr title="Distributed version control system for tracking changes in source code">Git</abbr> and GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr><a class="headerlink" href="#21-git-and-github-cli" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title"><abbr title="Distributed version control system for tracking changes in source code">Git</abbr> and GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr></p>
+<p><abbr title="Distributed version control system for tracking changes in source code">Git</abbr> is a distributed version control system. GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> brings GitHub actions to your terminal. These are essential for managing infrastructure code and collaborating on the homelab.</p>
+<ul>
+<li><a href="https://git-scm.com/" target="_blank">Official site</a></li>
+<li><a href="https://cli.github.com/" target="_blank">GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> docs</a></li>
+<li><a href="https://git-scm.com/doc" target="_blank">Getting started with <abbr title="Distributed version control system for tracking changes in source code">Git</abbr></a></li>
+<li><a href="https://cli.github.com/manual/" target="_blank">GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> manual</a></li>
+</ul>
+</div>
+<ol>
+<li>Create a GitHub account at <a href="https://github.com/" target="_blank">github.com</a> if you don't already have one.</li>
+</ol>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">macOS</label><label for="__tabbed_2_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install <abbr title="Distributed version control system for tracking changes in source code">Git</abbr> and GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr>:</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>git<span class="w"> </span>gh
+</code></pre></div>
+</li>
+<li>
+<p>Authenticate GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr>:</p>
+<div class="highlight"><pre><span></span><code>gh<span class="w"> </span>auth<span class="w"> </span>login
+</code></pre></div>
+</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install <abbr title="Distributed version control system for tracking changes in source code">Git</abbr> and GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">choco</span> <span class="n">install</span> <span class="n">git</span> <span class="n">gh</span>
+</code></pre></div>
+</li>
+<li>
+<p>Authenticate GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">gh</span> <span class="n">auth</span> <span class="n">login</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h4 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>git --version</code> to verify <abbr title="Distributed version control system for tracking changes in source code">Git</abbr> is installed.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>gh auth status</code> to confirm GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> is authenticated.</li>
+</ul>
+<blockquote>
+<p>🏆 Achievement Unlocked: GitHub connected!</p>
+</blockquote>
+<h3 id="22-cloudflare-wrangler">2.2 Cloudflare Wrangler<a class="headerlink" href="#22-cloudflare-wrangler" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Cloudflare Wrangler</p>
+<p>Wrangler is the <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> (Command Line Interface) tool for managing Cloudflare services, including Workers and <abbr title="Domain Name System, resolves human-readable names to IPs">DNS</abbr>.</p>
+<ul>
+<li><a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank">Official site</a></li>
+<li><a href="https://developers.cloudflare.com/workers/wrangler/commands/" target="_blank">Docs</a></li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">macOS</label><label for="__tabbed_3_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Node.js (if not already installed):</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>node
+</code></pre></div>
+</li>
+<li>
+<p>Install Wrangler via npm:</p>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>wrangler
+</code></pre></div>
+</li>
+<li>
+<p>Authenticate Wrangler:</p>
+<div class="highlight"><pre><span></span><code>wrangler<span class="w"> </span>login
+</code></pre></div>
+</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Node.js (if not already installed):</p>
+<div class="highlight"><pre><span></span><code><span class="n">choco</span> <span class="n">install</span> <span class="n">nodejs</span>
+</code></pre></div>
+</li>
+<li>
+<p>Install Wrangler via npm:</p>
+<div class="highlight"><pre><span></span><code><span class="n">npm</span> <span class="n">install</span> <span class="n">-g</span> <span class="n">wrangler</span>
+</code></pre></div>
+</li>
+<li>
+<p>Authenticate Wrangler:</p>
+<div class="highlight"><pre><span></span><code><span class="n">wrangler</span> <span class="n">login</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h4 id="validation_1">Validation<a class="headerlink" href="#validation_1" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>wrangler --version</code> to verify installation.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>wrangler whoami</code> to confirm authentication.</li>
+</ul>
+<blockquote>
+<p>🏆 Achievement Unlocked: Cloudflare wrangler ready!</p>
+</blockquote>
+<h3 id="23-docker-desktop">2.3 Docker Desktop<a class="headerlink" href="#23-docker-desktop" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Docker Desktop</p>
+<p>Docker runs applications in containers. Docker Desktop provides the local engine and UX (User Experience) we will use to run services during the labs.</p>
+<ul>
+<li><a href="https://www.docker.com/products/docker-desktop" target="_blank">Official site</a></li>
+<li><a href="https://docs.docker.com/get-started/" target="_blank">Docs</a></li>
+<li><a href="https://www.docker.com/101-tutorial" target="_blank">Training</a></li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">macOS</label><label for="__tabbed_4_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install via Homebrew Cask:</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>--cask<span class="w"> </span>docker
+</code></pre></div>
+</li>
+<li>
+<p>Validate:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>version
+docker<span class="w"> </span>run<span class="w"> </span>hello-world
+</code></pre></div>
+</li>
+</ol>
+<p>Note: Do not install the separate <code>docker</code> formula. Docker Desktop includes the <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr>.</p>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Docker Desktop. Enable Kubernetes only if needed later.</p>
+<div class="highlight"><pre><span></span><code><span class="n">choco</span> <span class="n">install</span> <span class="n">docker-desktop</span>
+</code></pre></div>
+</li>
+</ol>
+<p>Note: Do not install the separate <code>docker</code> package. Docker Desktop includes the <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr>.</p>
+<ol>
+<li>
+<p>Validate:</p>
+<div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">version</span>
+<span class="n">docker</span> <span class="n">run</span> <span class="n">hello-world</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h4 id="validation_2">Validation<a class="headerlink" href="#validation_2" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>docker version</code> to check Docker installation.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>docker run hello-world</code> to verify container runtime.</li>
+</ul>
+<blockquote>
+<p>🏆 Achievement Unlocked: Docker containerized!</p>
+</blockquote>
+<h3 id="24-terraform-install-and-validation">2.4 Terraform Install and Validation<a class="headerlink" href="#24-terraform-install-and-validation" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Terraform</p>
+<p>Terraform defines infrastructure as code (<abbr title="Infrastructure as Code, managing infra via declarative configs">IaC</abbr>) and provisions cloud or on‑prem resources declaratively.</p>
+<ul>
+<li><a href="https://www.terraform.io/" target="_blank">Official site</a></li>
+<li><a href="https://developer.hashicorp.com/terraform/docs" target="_blank">Docs</a></li>
+<li><a href="https://developer.hashicorp.com/terraform/tutorials" target="_blank">Getting started</a></li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">macOS</label><label for="__tabbed_5_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Terraform:</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>tap<span class="w"> </span>hashicorp/tap
+brew<span class="w"> </span>install<span class="w"> </span>hashicorp/tap/terraform
+</code></pre></div>
+</li>
+<li>
+<p>Validate:</p>
+<div class="highlight"><pre><span></span><code>terraform<span class="w"> </span>-version
+</code></pre></div>
+</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Terraform:</p>
+<div class="highlight"><pre><span></span><code><span class="n">choco</span> <span class="n">install</span> <span class="n">terraform</span>
+</code></pre></div>
+</li>
+<li>
+<p>Validate:</p>
+<div class="highlight"><pre><span></span><code><span class="n">terraform</span> <span class="n">-version</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h4 id="validation_3">Validation<a class="headerlink" href="#validation_3" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>terraform -version</code> to confirm installation.</li>
+</ul>
+<blockquote>
+<p>🏆 Achievement Unlocked: Terraform deployed!</p>
+</blockquote>
+<h3 id="25-vault-and-consul-cli">2.5 Vault and Consul <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr><a class="headerlink" href="#25-vault-and-consul-cli" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">HashiCorp Vault and Consul</p>
+<p>Vault manages secrets and protects sensitive data. Consul provides service discovery and key‑value storage. Both CLIs (Command Line Interfaces) are needed for later chapters.</p>
+<ul>
+<li><a href="https://www.vaultproject.io/" target="_blank">Vault site</a></li>
+<li><a href="https://www.consul.io/" target="_blank">Consul site</a></li>
+<li><a href="https://developer.hashicorp.com/vault/docs/commands" target="_blank">Vault <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> docs</a></li>
+<li><a href="https://developer.hashicorp.com/consul/docs/commands" target="_blank">Consul <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> docs</a></li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">macOS</label><label for="__tabbed_6_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Vault and Consul:</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>tap<span class="w"> </span>hashicorp/tap
+brew<span class="w"> </span>install<span class="w"> </span>hashicorp/tap/vault<span class="w"> </span>hashicorp/tap/consul
+</code></pre></div>
+</li>
+<li>
+<p>Validate:</p>
+<div class="highlight"><pre><span></span><code>vault<span class="w"> </span>--version
+consul<span class="w"> </span>--version
+</code></pre></div>
+</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Vault and Consul:</p>
+<div class="highlight"><pre><span></span><code><span class="n">choco</span> <span class="n">install</span> <span class="n">vault</span> <span class="n">consul</span>
+</code></pre></div>
+</li>
+<li>
+<p>Validate:</p>
+<div class="highlight"><pre><span></span><code><span class="n">vault</span> <span class="p">-</span><span class="n">-version</span>
+<span class="n">consul</span> <span class="p">-</span><span class="n">-version</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h4 id="validation_4">Validation<a class="headerlink" href="#validation_4" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>vault --version</code> to verify Vault <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr>.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>consul --version</code> to verify Consul <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr>.</li>
+</ul>
+<blockquote>
+<p>🏆 Achievement Unlocked: Secrets and service mesh mastered!</p>
+</blockquote>
+<h3 id="26-ansible-install-and-validation-optional-for-windows">2.6 Ansible Install and Validation (optional for Windows)<a class="headerlink" href="#26-ansible-install-and-validation-optional-for-windows" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Ansible</p>
+<p>Ansible automates configuration management and orchestration for your homelab.</p>
+<ul>
+<li><a href="https://www.ansible.com/" target="_blank">Official site</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/index.html" target="_blank">Docs</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html" target="_blank">Getting started</a></li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">macOS</label><label for="__tabbed_7_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Ansible:</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>ansible
+</code></pre></div>
+</li>
+<li>
+<p>Validate:</p>
+<div class="highlight"><pre><span></span><code>ansible<span class="w"> </span>--version
+</code></pre></div>
+</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<div class="admonition tip">
+<p class="admonition-title">Optional on Windows</p>
+<p>On Windows, install Ansible via WSL (Windows Subsystem for Linux) or another supported method. Skip if not needed now.</p>
+</div>
+<ol>
+<li>
+<p>Validate (if installed):</p>
+<div class="highlight"><pre><span></span><code><span class="n">ansible</span> <span class="p">-</span><span class="n">-version</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h4 id="validation_5">Validation<a class="headerlink" href="#validation_5" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Run <code>ansible --version</code> to verify installation (if installed).</li>
+</ul>
+<blockquote>
+<p>🏆 Achievement Unlocked: Automation activated!</p>
+</blockquote>
+<h3 id="27-visual-studio-code">2.7 Visual Studio Code<a class="headerlink" href="#27-visual-studio-code" title="Permanent link">&para;</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Visual Studio Code (VS Code)</p>
+<p>Visual Studio Code (VS Code) is a flexible editor with rich extensions useful for this lab.</p>
+<ul>
+<li><a href="https://code.visualstudio.com/" target="_blank">Download</a></li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">macOS</label><label for="__tabbed_8_2">Windows</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Visual Studio Code via Homebrew Cask:</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>--cask<span class="w"> </span>visual-studio-code
+</code></pre></div>
+</li>
+<li>
+<p>Install recommended extensions:</p>
+<ul>
+<li>hashicorp.terraform</li>
+<li>redhat.ansible</li>
+<li>ms-azuretools.vscode-docker</li>
+<li>redhat.vscode-yaml</li>
+<li>github.vscode-github-actions</li>
+<li>ms-vscode-remote.remote-containers</li>
+<li>gruntfuggly.todo-tree</li>
+<li>esbenp.prettier-vscode</li>
+<li>yzhang.markdown-all-in-one</li>
+</ul>
+<div class="highlight"><pre><span></span><code>code<span class="w"> </span>--install-extension<span class="w"> </span>hashicorp.terraform
+code<span class="w"> </span>--install-extension<span class="w"> </span>redhat.ansible
+code<span class="w"> </span>--install-extension<span class="w"> </span>ms-azuretools.vscode-docker
+code<span class="w"> </span>--install-extension<span class="w"> </span>redhat.vscode-yaml
+code<span class="w"> </span>--install-extension<span class="w"> </span>github.vscode-github-actions
+code<span class="w"> </span>--install-extension<span class="w"> </span>ms-vscode-remote.remote-containers
+code<span class="w"> </span>--install-extension<span class="w"> </span>gruntfuggly.todo-tree
+code<span class="w"> </span>--install-extension<span class="w"> </span>esbenp.prettier-vscode
+code<span class="w"> </span>--install-extension<span class="w"> </span>yzhang.markdown-all-in-one
+</code></pre></div>
+</li>
+<li>
+<p>(Optional) Apply quality‑of‑life settings via <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> by overwriting settings.json:</p>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39; &gt; ~/Library/Application\ Support/Code/User/settings.json</span>
+<span class="s">{</span>
+<span class="s">  &quot;editor.formatOnSave&quot;: true,</span>
+<span class="s">  &quot;files.trimTrailingWhitespace&quot;: true,</span>
+<span class="s">  &quot;editor.rulers&quot;: [100],</span>
+<span class="s">  &quot;editor.tabSize&quot;: 2,</span>
+<span class="s">  &quot;editor.insertSpaces&quot;: true,</span>
+<span class="s">  &quot;editor.detectIndentation&quot;: false,</span>
+<span class="s">  &quot;files.autoSave&quot;: &quot;afterDelay&quot;,</span>
+<span class="s">  &quot;files.autoSaveDelay&quot;: 1000,</span>
+<span class="s">  &quot;[terraform]&quot;: { &quot;editor.defaultFormatter&quot;: &quot;hashicorp.terraform&quot; },</span>
+<span class="s">  &quot;terraform.languageServer&quot;: { &quot;enabled&quot;: true },</span>
+<span class="s">  &quot;makefile.configureOnOpen&quot;: true</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>
+<p>Install Visual Studio Code via Chocolatey:</p>
+<div class="highlight"><pre><span></span><code><span class="n">choco</span> <span class="n">install</span> <span class="n">vscode</span>
+</code></pre></div>
+</li>
+<li>
+<p>Install recommended extensions:</p>
+<ul>
+<li>hashicorp.terraform</li>
+<li>redhat.ansible</li>
+<li>ms-azuretools.vscode-docker</li>
+<li>redhat.vscode-yaml</li>
+<li>github.vscode-github-actions</li>
+<li>ms-vscode-remote.remote-containers</li>
+<li>ms-vscode.powershell</li>
+<li>gruntfuggly.todo-tree</li>
+<li>esbenp.prettier-vscode</li>
+<li>yzhang.markdown-all-in-one</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">hashicorp</span><span class="p">.</span><span class="n">terraform</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">redhat</span><span class="p">.</span><span class="n">ansible</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">ms-azuretools</span><span class="p">.</span><span class="n">vscode-docker</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">redhat</span><span class="p">.</span><span class="n">vscode-yaml</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">github</span><span class="p">.</span><span class="n">vscode-github-actions</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">ms-vscode-remote</span><span class="p">.</span><span class="n">remote-containers</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">ms-vscode</span><span class="p">.</span><span class="n">powershell</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">gruntfuggly</span><span class="p">.</span><span class="n">todo-tree</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">esbenp</span><span class="p">.</span><span class="n">prettier-vscode</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="n">yzhang</span><span class="p">.</span><span class="n">markdown-all-in-one</span>
+</code></pre></div>
+</li>
+<li>
+<p>(Optional) Apply quality‑of‑life settings via <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> by overwriting settings.json:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Set-Content</span> <span class="s2">&quot;$env:APPDATA\Code\User\settings.json&quot;</span> <span class="sh">@&#39;</span>
+<span class="sh">{</span>
+<span class="sh">  &quot;editor.formatOnSave&quot;: true,</span>
+<span class="sh">  &quot;files.trimTrailingWhitespace&quot;: true,</span>
+<span class="sh">  &quot;editor.rulers&quot;: [100],</span>
+<span class="sh">  &quot;editor.tabSize&quot;: 2,</span>
+<span class="sh">  &quot;editor.insertSpaces&quot;: true,</span>
+<span class="sh">  &quot;editor.detectIndentation&quot;: false,</span>
+<span class="sh">  &quot;files.autoSave&quot;: &quot;afterDelay&quot;,</span>
+<span class="sh">  &quot;files.autoSaveDelay&quot;: 1000,</span>
+<span class="sh">  &quot;[terraform]&quot;: { &quot;editor.defaultFormatter&quot;: &quot;hashicorp.terraform&quot; },</span>
+<span class="sh">  &quot;terraform.languageServer&quot;: { &quot;enabled&quot;: true },</span>
+<span class="sh">  &quot;makefile.configureOnOpen&quot;: true</span>
+<span class="sh">}</span>
+<span class="sh">&#39;@</span>
+</code></pre></div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h4 id="validation_6">Validation<a class="headerlink" href="#validation_6" title="Permanent link">&para;</a></h4>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Open VS Code and verify recommended extensions are installed.</li>
+</ul>
+<blockquote>
+<p>🏆 Achievement Unlocked: Code editor powered up!</p>
+</blockquote>
+<h2 id="exit-criteria">Exit Criteria<a class="headerlink" href="#exit-criteria" title="Permanent link">&para;</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <abbr title="Distributed version control system for tracking changes in source code">Git</abbr> and GitHub <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> are installed and authenticated</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Wrangler is installed and authenticated</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> curl is installed and validated (Windows only, macOS already includes curl)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Docker Desktop is installed and running containers successfully</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Terraform is installed and validated</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Ansible is installed and validated (if applicable)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Vault <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> is installed and validated</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Consul <abbr title="Command-Line Interface, text-based way to interact with systems">CLI</abbr> is installed and validated</li>
+</ul>
+<blockquote>
+<p>🎉 Chapter Complete! You’ve earned up to 70 XP (like Whose Line, the points are made up but the fun is real). Onward to the next adventure!</p>
+</blockquote>
+<div class="admonition info">
+<p class="admonition-title">Quick Overview</p>
+<p><strong>What:</strong> Shared abbreviations and hover tooltips for the campaign.
+<strong>Why:</strong> Ensures acronyms and jargon stay consistent across all docs.
+<strong>Time:</strong> Ongoing; update whenever a new term is introduced.
+<strong>XP:</strong> +5 per new acronym (like Whose Line, the points are made up but the fun is real).</p>
+</div>
+<!-- Shared abbreviations for hover tooltips across the site -->
+<p>Think of this file as your universal translator—every acronym here powers hover definitions site-wide.</p>
+<blockquote>
+<p>🎉 Abbreviations updated! You’ve earned +5 XP for each new term (points don’t matter, but consistency does).</p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../01-Hardware/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hardware">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Hardware
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../03-Cloud-Accounts-and-Foundations/" class="md-footer__link md-footer__link--next" aria-label="Next: Cloud Accounts &amp; Foundations">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Cloud Accounts & Foundations
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/MichaelHeaton" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "content.code.copy", "toc.integrate", "navigation.sections", "navigation.footer"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>
