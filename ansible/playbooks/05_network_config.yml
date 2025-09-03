@@ -1,0 +1,111 @@
+- name: Configure network interfaces
+  hosts: pve
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Assert interfaces template exists
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/../templates/interfaces.j2"
+      register: tpl
+      delegate_to: localhost
+      become: false
+
+    - name: Fail if template is missing
+      ansible.builtin.fail:
+        msg: "Template not found at {{ playbook_dir }}/../templates/interfaces.j2"
+      when: not tpl.stat.exists
+
+    - name: Render /etc/network/interfaces
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../templates/interfaces.j2"  # noqa no-relative-paths
+        dest: /etc/network/interfaces
+        owner: root
+        group: root
+        mode: '0644'
+      register: interfaces_render
+      notify: Ifreload apply
+
+    - name: Assert required host IP vars are defined
+      ansible.builtin.assert:
+        that:
+          - cluster_ip is defined
+          - mgmt_ip is defined
+        fail_msg: >-
+          You must define cluster_ip (cluster/ring0 IP) and mgmt_ip (management IP)
+          for each host.
+        success_msg: "Required IP variables present."
+
+    - name: Compute host naming helpers
+      ansible.builtin.set_fact:
+        pve_domain: "{{ pve_domain | default(cluster_domain | default('SpecterRealm.com')) }}"
+        hn_u: "{{ inventory_hostname | upper }}"
+        hn_l: "{{ inventory_hostname | lower }}"
+
+    - name: Compute /etc/hosts line fragments for this node
+      ansible.builtin.set_fact:
+        _ring_line: >-
+          {{ cluster_ip }}
+          {{ hn_u }}.{{ pve_domain }} {{ hn_u }}
+          {{ hn_l }}.local {{ hn_l }}
+        _mgmt_line: >-
+          {{ mgmt_ip }}
+          {{ (inventory_hostname ~ '-mgmt') | upper }}.{{ pve_domain }}
+          {{ (inventory_hostname ~ '-mgmt') | upper }}
+        _storage_line: >-
+          {{ storage_ip }}
+          {{ (inventory_hostname ~ '-stor') | upper }}.{{ pve_domain }}
+          {{ (inventory_hostname ~ '-stor') | upper }}
+      when: cluster_ip is defined and mgmt_ip is defined
+
+    - name: Build managed /etc/hosts block for this node
+      ansible.builtin.set_fact:
+        _hosts_block: |-
+          # PVE node – put CLUSTER IP first
+          {{ _ring_line }}
+          # Mgmt IP as separate alias
+          {{ _mgmt_line }}
+          {% if storage_ip is defined %}
+          # Storage IP (used by Ceph/NFS/iSCSI, optional)
+          {{ _storage_line }}
+          {% endif %}
+
+    - name: Build list of this node's host IPs
+      ansible.builtin.set_fact:
+        host_ips: >-
+          {{
+            [cluster_ip]
+            + ([mgmt_ip] if (mgmt_ip is defined) else [])
+            + ([storage_ip] if (storage_ip is defined) else [])
+          }}
+
+    - name: Remove any unmanaged /etc/hosts lines for this node
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: '^{{ item | regex_escape }}\s+'
+        state: absent
+      loop: "{{ host_ips }}"
+
+    - name: Ensure /etc/hosts contains PVE mappings for this node (cluster IP first)
+      ansible.builtin.blockinfile:
+        path: /etc/hosts
+        marker: "# {mark} ANSIBLE MANAGED PVE HOST ENTRIES"
+        block: "{{ _hosts_block }}"
+        create: true
+        mode: '0644'
+        backup: false
+
+    - name: Ifreload dry-run
+      ansible.builtin.command: ifreload -a -s
+      register: ifreload_check
+      changed_when: false
+      failed_when: ifreload_check.rc != 0 and ('warning' not in ifreload_check.stderr | lower)
+
+    - name: Show planned changes
+      ansible.builtin.debug:
+        var: ifreload_check.stdout_lines
+
+  handlers:
+    - name: Ifreload apply
+      ansible.builtin.command: ifreload -a
+      register: ifreload_apply
+      changed_when: true

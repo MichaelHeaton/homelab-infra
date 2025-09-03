@@ -1,0 +1,39 @@
+- name: Collect network facts
+  hosts: pve
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Backup current interfaces file
+      ansible.builtin.copy:
+        src: /etc/network/interfaces
+        dest: "/root/interfaces.backup.{{ ansible_date_time.iso8601 }}"
+        remote_src: true
+        mode: '0600'
+
+    - name: Show current interfaces file
+      ansible.builtin.command: cat /etc/network/interfaces
+      register: interfaces_txt
+      changed_when: false
+
+    - name: List kernel NICs
+      ansible.builtin.command: ip -o link
+      register: ip_link
+      changed_when: false
+
+    - name: List addresses
+      ansible.builtin.command: ip -o addr
+      register: ip_addr
+      changed_when: false
+
+    - name: Detect VLAN capability (kernel reports)
+      ansible.builtin.command: ip -d link
+      register: ip_detailed
+      changed_when: false
+
+    - name: Summary
+      ansible.builtin.debug:
+        msg:
+          host: "{{ inventory_hostname }}"
+          main_ifaces: "{{ ansible_facts.interfaces | difference(['lo']) }}"
+          mgmt_guess: "{{ ansible_default_ipv4.interface | default('unknown') }}"
+          backups: "saved to /root/interfaces.backup.*"

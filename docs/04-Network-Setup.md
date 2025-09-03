@@ -83,6 +83,31 @@ Adjust per physical layout. Document every port to avoid misconfiguration and to
 - [ ] Basic rules applied
 🏆 Achievement Unlocked: Firewall foundations laid!
 
+### 4.3b Configure NTP
+- Ensure all network gear, Proxmox nodes, and NAS devices sync to consistent time sources.
+- UniFi requires IP addresses, not hostnames, for NTP servers.
+
+#### Recommended Servers
+- Primary: `132.163.96.1` (NIST Boulder)
+- Secondary: `129.6.15.28` (NIST Gaithersburg)
+- LAN fallback: NAS01 at `172.16.0.5` with NTP service enabled
+
+#### Steps
+1. In UniFi Controller, go to **Settings → System → Advanced → NTP Servers**.
+2. Enter both NIST IPs.
+3. Enable NTP service on NAS01 (DSM: Control Panel → Regional Options → Time → NTP Service).
+4. Configure Proxmox nodes to use all three sources:
+   - `132.163.96.1` (UniFi/DHCP-limited NTP server)
+   - `129.6.15.28` (UniFi/DHCP-limited NTP server)
+   - `172.16.0.5` (NAS01; must be added manually on Proxmox nodes since UniFi only supports 2 servers)
+5. Validate with `timedatectl show-timesync --all` on Proxmox that all sources are listed and in sync.
+
+#### Validation
+- [ ] UniFi NTP servers configured with both NIST IPs
+- [ ] NAS01 NTP service enabled
+- [ ] Proxmox nodes use both NIST IPs from UniFi and NAS01 (manual fallback) as time sources
+🏆 Achievement Unlocked: Network time synchronized!
+
 ### 4.4 Export and import to Terraform
 - Initialize provider for your platform.
 - Use `terraform import` to capture existing VLANs, interfaces, DHCP, and rules.

@@ -1,0 +1,22 @@
+---
+# Home: https://github.com/CorentinTh/it-tools
+# Synology NAS: mkdir -p /volume1/docker/appdata/it-tools/config
+# Hard link .env: ln /volume1/docker/appdata/.env /volume1/docker/appdata/it-tools/.env
+services:
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    logging:
+      driver: "json-file"
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    ports:
+      - 8082:80
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/it-tools/config:/app/config # Make sure your local config directory exists

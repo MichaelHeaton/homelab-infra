@@ -1,0 +1,24 @@
+# Managed by Ansible — do not edit
+127.0.0.1       localhost
+::1             localhost
+
+{# convenience #}
+{% set domain = pve_domain | default('SpecterRealm.com') %}
+{% set me = inventory_hostname %}
+{% set me_uc = me | upper %}
+{% set ph = pve_hosts %}
+
+# Local node – put CLUSTER IP first
+{{ ph[me].cluster_ip.split('/')[0] }}    {{ me_uc }}.{{ domain }} {{ me_uc }} {{ me }}.local {{ me }}
+# Mgmt alias
+{{ ph[me].mgmt_ip.split('/')[0] }}       {{ me_uc }}-mgmt.{{ domain }} {{ me_uc }}-mgmt
+
+# Cluster peers
+{% for h, vals in ph | dictsort if h != me %}
+{{ vals.cluster_ip.split('/')[0] }}      {{ h | upper }}.{{ domain }} {{ h | upper }} {{ h }}.local {{ h }}
+{% endfor %}
+
+# Mgmt peers (optional)
+{% for h, vals in ph | dictsort if h != me %}
+{{ vals.mgmt_ip.split('/')[0] }}         {{ h | upper }}-mgmt.{{ domain }} {{ h | upper }}-mgmt
+{% endfor %}
